@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Netdata</Name>
+  <Repository>titpetric/netdata</Repository>
+  <Registry>https://hub.docker.com/r/titpetric/netdata/</Registry>
+  <Network>host</Network>
+  <Privileged>false</Privileged>
+  <Support>https://lime-technology.com/forum/index.php?topic=49534.0</Support>
+  <Overview>
+[b]Real-time performance monitoring, done right! [/b][br]
+- real-time, per second updates, snappy refreshes![br]
+- 300+ charts out of the box, 2000+ metrics monitored![br]
+- zero configuration, zero maintenance, zero dependencies![br]
+Live demo: [a href]http://netdata.firehol.org[/a][br]
+  </Overview>
+  <Category>Tools:System</Category>
+  <WebUI> http://[IP]:[PORT:19999]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/Data-Monkey/docker-templates/master/Data-Monkey/netdata.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/Data-Monkey/docker-templates/master/Data-Monkey/img/netdata.jpg</Icon>
+  <ExtraParams>--cap-add SYS_PTRACE --log-opt max-size=50m --log-opt max-file=1</ExtraParams>
+  <DateInstalled>1507969462</DateInstalled>
+  <Description>&#xD;
+[b]Real-time performance monitoring, done right! [/b][br]&#xD;
+- real-time, per second updates, snappy refreshes![br]&#xD;
+- 300+ charts out of the box, 2000+ metrics monitored![br]&#xD;
+- zero configuration, zero maintenance, zero dependencies![br]&#xD;
+Live demo: [a href]http://netdata.firehol.org[/a][br]&#xD;
+  </Description>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/cache/Docker/netdata</HostDir>
+      <ContainerDir>/etc/netdata</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/proc</HostDir>
+      <ContainerDir>/host/proc</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/sys</HostDir>
+      <ContainerDir>/host/sys</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/etc</HostDir>
+      <ContainerDir>/host/etc</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/dev</HostDir>
+      <ContainerDir>/host/dev</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/Docker/netdata/custom/</HostDir>
+      <ContainerDir>/custom</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/var/run/docker.sock</HostDir>
+      <ContainerDir>/var/run/docker.sock</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+  </Data>
+  <Environment/>
+  <Config Name="Host Path 1" Target="/etc/netdata" Default="/mnt/cache/appdata/netdata" Mode="rw" Description="Container Path: /etc/netdata" Type="Path" Display="always" Required="true" Mask="false">/mnt/cache/Docker/netdata</Config>
+  <Config Name="Host Path 2" Target="/host/proc" Default="/proc" Mode="ro" Description="Container Path: /host/proc" Type="Path" Display="always" Required="true" Mask="false">/proc</Config>
+  <Config Name="Host Path 3" Target="/host/sys" Default="/sys" Mode="ro" Description="Container Path: /host/sys" Type="Path" Display="always" Required="true" Mask="false">/sys</Config>
+  <Config Name="Host Path 4" Target="/host/etc" Default="" Mode="ro" Description="Container Path: /host/etc" Type="Path" Display="always" Required="false" Mask="false">/etc</Config>
+  <Config Name="Host Path 5" Target="/host/dev" Default="" Mode="ro" Description="Container Path: /host/dev" Type="Path" Display="always" Required="false" Mask="false">/dev</Config>
+  <Config Name="Custom page" Target="/custom" Default="" Mode="rw" Description="Container Path: /custom" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/Docker/netdata/custom/</Config>
+  <Config Name="Docker names" Target="/var/run/docker.sock" Default="" Mode="ro" Description="Container Path: /var/run/docker.sock" Type="Path" Display="always" Required="false" Mask="false">/var/run/docker.sock</Config>
+</Container>
