@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>openvpn-as</Name>
+  <Repository>linuxserver/openvpn-as</Repository>
+  <Registry>https://hub.docker.com/r/linuxserver/openvpn-as/</Registry>
+  <Network>host</Network>
+  <Privileged>true</Privileged>
+  <Support>http://lime-technology.com/forum/index.php?topic=43317.0</Support>
+  <Overview>OpenVPN Access Server is a full featured secure network tunneling VPN software solution that integrates OpenVPN server capabilities, enterprise management capabilities, simplified OpenVPN Connect UI, and OpenVPN Client software packages that accommodate Windows, MAC, Linux, Android, and iOS environments.</Overview>
+  <Category>Network:Other</Category>
+  <WebUI>https://[IP]:[PORT:943]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/openvpn-as.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/openvpn-as-icon.png</Icon>
+  <ExtraParams/>
+  <DateInstalled>1494197980</DateInstalled>
+  <Description>OpenVPN Access Server is a full featured secure network tunneling VPN software solution that integrates OpenVPN server capabilities, enterprise management capabilities, simplified OpenVPN Connect UI, and OpenVPN Client software packages that accommodate Windows, MAC, Linux, Android, and iOS environments.&#xD;
+  [br][br]&#xD;
+  [b][u][span style='color: #E80000;']Configuration[/span][/u][/b][br]&#xD;
+  [b]/config[/b] Where openvpn-as should store settings, logs and configuration[br]&#xD;
+  </Description>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish>
+      <Port>
+        <HostPort>943</HostPort>
+        <ContainerPort>943</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>9443</HostPort>
+        <ContainerPort>9443</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>1194</HostPort>
+        <ContainerPort>1194</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/cache/Docker/openvpn</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>100</Value>
+      <Name>PGID</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>99</Value>
+      <Name>PUID</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="Host Port 1" Target="943" Default="943" Mode="tcp" Description="n/a" Type="Port" Display="always" Required="true" Mask="false">943</Config>
+  <Config Name="Host Port 2" Target="9443" Default="9443" Mode="tcp" Description="n/a" Type="Port" Display="always" Required="true" Mask="false">9443</Config>
+  <Config Name="Host Port 3" Target="1194" Default="1194" Mode="udp" Description="n/a" Type="Port" Display="always" Required="true" Mask="false">1194</Config>
+  <Config Name="Key 1" Target="PGID" Default="100" Mode="" Description="Container Variable: PGID" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
+  <Config Name="Key 2" Target="PUID" Default="99" Mode="" Description="Container Variable: PUID" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
+  <Config Name="AppData Config Path" Target="/config" Default="/mnt/user/appdata/openvpn-as" Mode="rw" Description="Container Path: /config" Type="Path" Display="advanced-hide" Required="true" Mask="false">/mnt/cache/Docker/openvpn</Config>
+</Container>
