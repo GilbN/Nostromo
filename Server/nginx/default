@@ -1,1 +1,373 @@
 
+#PLEX UPSTREAM FOR THE SUB DOMAIN
+upstream plex-upstream {
+server 192.168.1.34:32400;
+    keepalive 32;
+}
+
+#ORGANIZR UPSTREAM
+upstream organizr-upstream {
+server 192.168.1.34:8282;
+    keepalive 32;
+}
+
+#NETDATA UPSTREAM
+upstream backend {
+server 192.168.1.34:19999;
+	keepalive 64;
+}
+
+#DELUGE UPSTREAM
+upstream deluge-upstream {
+server 192.168.1.34:8113;
+    keepalive 32;
+}
+
+# REDIRECT TRAFFIC TO https://[domain.com]
+server {
+    listen 80;
+    server_name _;
+	return 301 https://$host$request_uri;
+}
+
+# MAIN SERVER BLOCK
+server {
+    listen 443 ssl http2;
+    server_name DOMAIN.COM;    
+	
+	# SSL settings
+	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
+	ssl_certificate_key /config/keys/letsencrypt/privkey.pem;
+	ssl_dhparam /config/nginx/dhparams.pem;
+	ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
+	ssl_prefer_server_ciphers on;
+		
+	client_max_body_size 0;
+	
+	# Custom error pages 
+		error_page 400 401 402 403 404 500 502 503 504 /error.php?error=$status;
+		
+	# AUTHORIZATION BLOCK	
+		location /auth-admin {
+            internal;
+            proxy_pass http://192.168.1.34:8282/auth.php?admin;
+            proxy_set_header Content-Length "";
+        }
+
+        location /auth-user {
+            internal;
+            proxy_pass http://192.168.1.34:8282/auth.php?user;
+            proxy_set_header Content-Length "";
+        }
+	
+	
+	# ORGANIZR CONTAINER
+	location / {
+        proxy_pass http://organizr-upstream;
+        include /config/nginx/proxy.conf;
+        }
+		
+	# BLOCK DASHBOARD FILES
+	location ~ \.(json|db|yml|log|md|conf|lock)$|/\. {
+    return 404;
+}
+
+	# PLEXPY CONTAINER
+	# Do NOT check "Enable HTTP Proxy" in PlexPy
+	# Oh And Domain.com/plexpy/auth is the address..
+    location /plexpy {
+		auth_request /auth-user;
+		#location /auth-user;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+   		proxy_pass http://192.168.1.34:8181;
+		include /config/nginx/proxy.conf;
+      	proxy_bind $server_addr;
+      	proxy_set_header X-Forwarded-Host $server_name;
+		proxy_set_header X-Forwarded-Ssl     on;
+		
+	}	
+	
+	# RADARR CONTAINER
+	location ^~ /radarr {
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+		auth_request /auth-admin;
+    	proxy_pass http://192.168.1.34:7878/radarr;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+	
+	# SONARR CONTAINER
+	location ^~ /sonarr {
+		auth_request /auth-admin;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+    	proxy_pass http://192.168.1.34:8989/sonarr;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+
+	# JACKETT CONTAINER
+	location ^~ /jackett/ {
+		auth_request /auth-admin;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+    	proxy_pass http://192.168.1.34:9117/;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}	
+	
+	# NETDATA 301 REDIRECT
+	location /netdata {
+        return 301 /netdata/;
+    }
+	
+	# NETDATA CONTAINER
+	location ~ /netdata/(?<ndpath>.*) {
+		#auth_request /auth-user;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Server $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_pass http://backend/$ndpath$is_args$args;
+		proxy_http_version 1.1;
+		proxy_pass_request_headers on;
+		proxy_set_header Connection “keep-alive”;
+		proxy_store off;
+	}
+
+	# OMBI CONTAINER
+#	location ^~ /ombi {
+#		auth_request /auth-user;
+#		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+#    	include /config/nginx/proxy.conf;
+#		proxy_pass http://192.168.1.34:3579/ombi;
+#	}
+	
+	#OMBIV3 CONTAINER
+    location /ombi {
+			auth_request /auth-user;
+            proxy_pass http://192.168.1.34:3579/ombi;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection keep-alive;
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    }	
+	
+	# SABNZBD CONTAINER
+	location ^~ /sabnzbd {
+		auth_request /auth-admin;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+    	include /config/nginx/proxy.conf;
+		proxy_pass http://192.168.1.34:8383/sabnzbd/;
+		proxy_set_header Host $host;
+	}
+	
+	# NZBGET CONTAINER
+    location ^~ /nzbget {
+		auth_request /auth-admin;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+    	include /config/nginx/proxy.conf;
+		proxy_pass http://192.168.1.34:6789;
+		proxy_set_header Host $host;
+    }
+	
+	# LOGARR 
+	location /logarr {
+		auth_request /auth-admin;
+		root /config/www;
+		index index.php;
+		include /config/nginx/php.conf;
+	}
+	
+	# MONITORR 
+	location /monitorr {
+		auth_request /auth-admin;
+		root /config/www;
+		index index.html index.php;
+		include /config/nginx/php.conf;
+	}
+	# deez
+	location /deezloader {
+		auth_request /auth-admin;
+		root /config/www/;
+		index index.html index.php;
+		include /config/nginx/php.conf;
+	}	
+	# CUSTOM NETDATA
+	location /customnetdata {
+		#auth_request /auth-admin;
+		root /config/www/;
+		index test2.html index.php;
+		#include /config/nginx/php.conf;
+	}
+	# PLEX SUB DIR	
+	    location /plex/ {
+		auth_request /auth-user;
+        proxy_pass          http://plex-upstream/;
+        include /config/nginx/php.conf;
+    }
+    if ($http_referer ~* /plex/) {
+        rewrite ^/web/(.*) /plex/web/$1? redirect;
+    }
+	
+}
+
+# PLEX SERVER 
+   server {
+     listen 443 ssl http2;
+     server_name plex plex.DOMAIN.COM;
+
+     location /error/ {
+       alias /www/errorpages/;
+       internal;
+       }
+	
+	# Custom error pages
+	error_page 400 401 402 403 404 500 502 /error.php?error=$status;
+	
+        location /auth-user {
+            internal;
+            proxy_pass http://192.168.1.34:8282/auth.php?user;
+            proxy_set_header Content-Length "";
+        }
+	
+     location / {
+      
+       proxy_redirect off;
+       proxy_buffering off;
+	   proxy_hide_header X-Frame-Options;
+
+       # Spoof the request as coming from ourselves since otherwise Plex will block access, e.g. logging:
+       # "Request came in with unrecognized domain / IP 'tv.example.com' in header Referer; treating as non-local"
+       proxy_set_header        Host                      $server_addr;
+       proxy_set_header        Referer                   $server_addr;
+       proxy_set_header        Origin                    $server_addr;
+
+       proxy_set_header        X-Real-IP                 $remote_addr;
+       proxy_set_header        X-Forwarded-For           $proxy_add_x_forwarded_for;
+       proxy_set_header        X-Plex-Client-Identifier  $http_x_plex_client_identifier;
+       proxy_set_header        Cookie                    $http_cookie;
+
+       ## Required for Websockets
+       proxy_http_version      1.1;
+       proxy_set_header        Upgrade                   $http_upgrade;
+       proxy_set_header        Connection                "upgrade";
+       proxy_read_timeout      36000s;                   # Timeout after 10 hours
+
+       proxy_next_upstream     error timeout invalid_header http_500 http_502 http_503 http_504;
+		
+		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+		#auth_request /auth-user;	
+		proxy_pass http://plex-upstream;
+     }
+   }
+ 
+# BLOG SITE
+server {
+		listen 80;	
+		listen 443 ssl http2;
+		server_name blog.DOMAIN.COM;
+ 
+      root /config/www/grav/;
+      index index.html index.php;
+ 
+    location /error/ {
+        alias /www/errorpages/;
+        internal;
+        }
+		
+	location / {
+                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+        }
+		
+		location /admin {
+                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+				    auth_basic "Restricted";
+					auth_basic_user_file /config/nginx/.htpasswd;
+        }
+ 
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# With php7-cgi alone:
+		fastcgi_pass 127.0.0.1:9000;
+		# With php7-fpm:
+		#fastcgi_pass unix:/var/run/php7-fpm.sock;
+		fastcgi_index index.php;
+		include /etc/nginx/fastcgi_params;
+	}
+ 
+    fastcgi_buffer_size 4K;
+    fastcgi_buffers 64 4k; 
+}
+
+# LOGARR 
+server {
+		listen 80;	
+		listen 443 ssl http2;
+		server_name logs.DOMAIN.COM;
+ 
+    root /config/www/logarr/;
+    index index.html index.php;
+	if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+	
+	location /auth-admin {
+        internal;
+        proxy_pass http://192.168.1.34:8282/auth.php?admin;
+        proxy_set_header Content-Length "";
+        }
+	
+	location / {
+				#auth_request /auth-admin;
+                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+        }
+	
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# With php7-cgi alone:
+		fastcgi_pass 127.0.0.1:9000;
+		# With php7-fpm:
+		#fastcgi_pass unix:/var/run/php7-fpm.sock;
+		fastcgi_index index.php;
+		include /etc/nginx/fastcgi_params;
+	}
+ 
+    fastcgi_buffer_size 4K;
+    fastcgi_buffers 64 4k; 
+}
+
+#MONITORR 
+server {
+		listen 80;	
+		listen 443 ssl http2;
+		server_name monitor.DOMAIN.COM;
+ 
+      root /config/www/deez/monitorr;
+      index index.html index.php;
+	if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+	
+	location / {
+				#auth_request /auth-admin;
+                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+        }
+	
+
+    fastcgi_buffer_size 4K;
+    fastcgi_buffers 64 4k; 
+}
+
+# DELUGE CONTAINER
+server {
+    server_name  deluge.DOMAIN.COM;
+		listen 80;
+        listen 443 ssl http2;
+
+	location / {
+        proxy_pass http://deluge-upstream;
+        include /config/nginx/proxy.conf;
+		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+	}
+	
+}
+
