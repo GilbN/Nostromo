@@ -148,8 +148,8 @@
   <Config Name="Host Port 5" Target="8118" Default="8118" Mode="tcp" Description="Container Port: 8118" Type="Port" Display="always" Required="true" Mask="false">8118</Config>
   <Config Name="Host Path 2" Target="/downloads" Default="/mnt/cache/appdata/data" Mode="rw" Description="Container Path: /downloads" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/Media/Downloads/</Config>
   <Config Name="Key 1" Target="VPN_ENABLED" Default="yes|no" Mode="" Description="Container Variable: VPN_ENABLED" Type="Variable" Display="always" Required="false" Mask="false">yes</Config>
-  <Config Name="Key 2" Target="VPN_USER" Default="vpn username" Mode="" Description="Container Variable: VPN_USER" Type="Variable" Display="always" Required="false" Mask="false">xxx</Config>
-  <Config Name="Key 3" Target="VPN_PASS" Default="vpn password" Mode="" Description="Container Variable: VPN_PASS" Type="Variable" Display="always" Required="false" Mask="false">xxx</Config>
+  <Config Name="Key 2" Target="VPN_USER" Default="vpn username" Mode="" Description="Container Variable: VPN_USER" Type="Variable" Display="always" Required="false" Mask="false">p6237653</Config>
+  <Config Name="Key 3" Target="VPN_PASS" Default="vpn password" Mode="" Description="Container Variable: VPN_PASS" Type="Variable" Display="always" Required="false" Mask="false">WRCwQifKwJ</Config>
   <Config Name="Key 4" Target="VPN_PROV" Default="pia|airvpn|custom" Mode="" Description="Container Variable: VPN_PROV" Type="Variable" Display="always" Required="false" Mask="false">pia</Config>
   <Config Name="Key 5" Target="VPN_OPTIONS" Default="" Mode="" Description="Container Variable: VPN_OPTIONS" Type="Variable" Display="always" Required="false" Mask="false"/>
   <Config Name="Key 6" Target="STRICT_PORT_FORWARD" Default="yes" Mode="" Description="Container Variable: STRICT_PORT_FORWARD" Type="Variable" Display="always" Required="false" Mask="false">yes</Config>
