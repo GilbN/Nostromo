@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>radarr</Name>
+  <Repository>linuxserver/radarr</Repository>
+  <Registry>https://hub.docker.com/r/linuxserver/radarr/</Registry>
+  <Network>bridge</Network>
+  <Privileged>false</Privileged>
+  <Support>http://lime-technology.com/forum/index.php?topic=55500.0</Support>
+  <Overview>Radarr - A fork of Sonarr to work with movies &#xE0; la Couchpotato.</Overview>
+  <Category>Downloaders: MediaApp:Video Status:Beta</Category>
+  <WebUI>http://[IP]:[PORT:7878]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/radarr.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/radarr.png</Icon>
+  <ExtraParams>--memory=3G -c=200</ExtraParams>
+  <DateInstalled>1507991716</DateInstalled>
+  <Description>Radarr - A fork of Sonarr to work with movies &#xE0; la Couchpotato.</Description>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>7878</HostPort>
+        <ContainerPort>7878</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/Media/Downloads/</HostDir>
+      <ContainerDir>/downloads</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/Media/Filmer/Filmer/</HostDir>
+      <ContainerDir>/movies</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/Media/Filmer/3D Filmer/</HostDir>
+      <ContainerDir>/3DMovies</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/Media/Filmer/4K/</HostDir>
+      <ContainerDir>/4KMovies</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/cache/Docker/radarr</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>99</Value>
+      <Name>PUID</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>100</Value>
+      <Name>PGID</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="Host Port 1" Target="7878" Default="7878" Mode="tcp" Description="Container Port: 7878" Type="Port" Display="always" Required="true" Mask="false">7878</Config>
+  <Config Name="Host Path 2" Target="/downloads" Default="" Mode="rw" Description="Container Path: /downloads" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/Media/Downloads/</Config>
+  <Config Name="Host Path 3" Target="/movies" Default="" Mode="rw" Description="Container Path: /movies" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/Media/Filmer/Filmer/</Config>
+  <Config Name="Key 1" Target="PUID" Default="99" Mode="" Description="Container Variable: PUID" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
+  <Config Name="Key 2" Target="PGID" Default="100" Mode="" Description="Container Variable: PGID" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
+  <Config Name="3d movies" Target="/3DMovies" Default="" Mode="rw" Description="Container Path: /3DMovies" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/Media/Filmer/3D Filmer/</Config>
+  <Config Name="4K Movies" Target="/4KMovies" Default="" Mode="rw" Description="Container Path: /4KMovies" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/Media/Filmer/4K/</Config>
+  <Config Name="AppData Config Path" Target="/config" Default="/mnt/user/appdata/radarr" Mode="rw" Description="Container Path: /config" Type="Path" Display="advanced-hide" Required="true" Mask="false">/mnt/cache/Docker/radarr</Config>
+</Container>
