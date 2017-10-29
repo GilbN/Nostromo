@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>cadvisor</Name>
+  <Repository>google/cadvisor:latest</Repository>
+  <Registry>https://registry.hub.docker.com/u/google/cadvisor/</Registry>
+  <Network>bridge</Network>
+  <Privileged>false</Privileged>
+  <Support>http://lime-technology.com/forum/index.php?topic=34009.0</Support>
+  <Overview>cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics of their running containers. It is a running daemon that collects, aggregates, processes, and exports information about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage, and histograms of complete historical resource usage. This data is exported by container and machine-wide.</Overview>
+  <Category>Tools:</Category>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon>http://i.imgur.com/stlnoKR.png</Icon>
+  <ExtraParams/>
+  <DateInstalled>1495277426</DateInstalled>
+  <Description>cAdvisor (Container Advisor) provides container users an understanding of the resource usage and performance characteristics of their running containers. It is a running daemon that collects, aggregates, processes, and exports information about running containers. Specifically, for each container it keeps resource isolation parameters, historical resource usage, and histograms of complete historical resource usage. This data is exported by container and machine-wide.</Description>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8081</HostPort>
+        <ContainerPort>8080</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/</HostDir>
+      <ContainerDir>/rootfs</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/var/run</HostDir>
+      <ContainerDir>/var/run</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/sys</HostDir>
+      <ContainerDir>/sys</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/var/lib/docker/</HostDir>
+      <ContainerDir>/var/lib/docker/</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>true</Value>
+      <Name>detach</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="Host Port 1" Target="8080" Default="8081" Mode="tcp" Description="Container Port: 8080" Type="Port" Display="always" Required="true" Mask="false">8081</Config>
+  <Config Name="Host Path 1" Target="/rootfs" Default="/" Mode="ro" Description="Container Path: /rootfs" Type="Path" Display="always" Required="true" Mask="false">/</Config>
+  <Config Name="Host Path 2" Target="/var/run" Default="/var/run" Mode="rw" Description="Container Path: /var/run" Type="Path" Display="always" Required="true" Mask="false">/var/run</Config>
+  <Config Name="Host Path 3" Target="/sys" Default="/sys" Mode="ro" Description="Container Path: /sys" Type="Path" Display="always" Required="true" Mask="false">/sys</Config>
+  <Config Name="Host Path 4" Target="/var/lib/docker/" Default="/var/lib/docker/" Mode="ro" Description="Container Path: /var/lib/docker/" Type="Path" Display="always" Required="true" Mask="false">/var/lib/docker/</Config>
+  <Config Name="Key 1" Target="detach" Default="true" Mode="" Description="Container Variable: detach" Type="Variable" Display="always" Required="false" Mask="false">true</Config>
+</Container>
