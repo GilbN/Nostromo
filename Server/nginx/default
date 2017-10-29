@@ -70,7 +70,7 @@ server {
 	# BLOCK DASHBOARD FILES
 	location ~ \.(json|db|yml|log|md|conf|lock)$|/\. {
     return 404;
-}
+	}
 
 	# PLEXPY CONTAINER
 	# Do NOT check "Enable HTTP Proxy" in PlexPy
@@ -117,12 +117,12 @@ server {
     	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}	
 	
-	# NETDATA 301 REDIRECT
+# NETDATA 301 REDIRECT
 	location /netdata {
         return 301 /netdata/;
     }
 	
-	# NETDATA CONTAINER
+# NETDATA CONTAINER
 	location ~ /netdata/(?<ndpath>.*) {
 		#auth_request /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
@@ -136,7 +136,7 @@ server {
 		proxy_store off;
 	}
 
-	# OMBI CONTAINER
+# OMBI CONTAINER
 #	location ^~ /ombi {
 #		auth_request /auth-user;
 #		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
@@ -144,7 +144,7 @@ server {
 #		proxy_pass http://192.168.1.34:3579/ombi;
 #	}
 	
-	#OMBIV3 CONTAINER
+#OMBIV3 CONTAINER
     location /ombi {
 			auth_request /auth-user;
             proxy_pass http://192.168.1.34:3579/ombi;
@@ -153,9 +153,9 @@ server {
             proxy_set_header Connection keep-alive;
             proxy_set_header Host $host;
             proxy_cache_bypass $http_upgrade;
-    }	
+    	}	
 	
-	# SABNZBD CONTAINER
+# SABNZBD CONTAINER
 	location ^~ /sabnzbd {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
@@ -164,16 +164,16 @@ server {
 		proxy_set_header Host $host;
 	}
 	
-	# NZBGET CONTAINER
+# NZBGET CONTAINER
     location ^~ /nzbget {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
     	include /config/nginx/proxy.conf;
 		proxy_pass http://192.168.1.34:6789;
 		proxy_set_header Host $host;
-    }
+    	}
 	
-	# LOGARR 
+# LOGARR 
 	location /logarr {
 		auth_request /auth-admin;
 		root /config/www;
@@ -181,36 +181,36 @@ server {
 		include /config/nginx/php.conf;
 	}
 	
-	# MONITORR 
+# MONITORR 
 	location /monitorr {
 		auth_request /auth-admin;
 		root /config/www;
 		index index.html index.php;
 		include /config/nginx/php.conf;
 	}
-	# deez
+# deez
 	location /deezloader {
 		auth_request /auth-admin;
 		root /config/www/;
 		index index.html index.php;
 		include /config/nginx/php.conf;
 	}	
-	# CUSTOM NETDATA
+# CUSTOM NETDATA
 	location /customnetdata {
 		#auth_request /auth-admin;
 		root /config/www/;
 		index test2.html index.php;
 		#include /config/nginx/php.conf;
 	}
-	# PLEX SUB DIR	
+# PLEX SUB DIR	
 	    location /plex/ {
 		auth_request /auth-user;
         proxy_pass          http://plex-upstream/;
         include /config/nginx/php.conf;
-    }
+    	}
     if ($http_referer ~* /plex/) {
         rewrite ^/web/(.*) /plex/web/$1? redirect;
-    }
+    	}
 	
 }
 
