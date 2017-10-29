@@ -61,21 +61,21 @@ server {
         }
 	
 	
-	# ORGANIZR CONTAINER
+# ORGANIZR CONTAINER
 	location / {
         proxy_pass http://organizr-upstream;
         include /config/nginx/proxy.conf;
         }
 		
-	# BLOCK DASHBOARD FILES
+# BLOCK DASHBOARD FILES
 	location ~ \.(json|db|yml|log|md|conf|lock)$|/\. {
     return 404;
 	}
 
-	# PLEXPY CONTAINER
-	# Do NOT check "Enable HTTP Proxy" in PlexPy
-	# Oh And Domain.com/plexpy/auth is the address..
-    location /plexpy {
+# PLEXPY CONTAINER
+# Do NOT check "Enable HTTP Proxy" in PlexPy
+# Oh And Domain.com/plexpy/auth is the address..
+    	location /plexpy {
 		auth_request /auth-user;
 		#location /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
@@ -107,7 +107,7 @@ server {
     	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 
-	# JACKETT CONTAINER
+# JACKETT CONTAINER
 	location ^~ /jackett/ {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
