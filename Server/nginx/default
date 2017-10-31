@@ -45,7 +45,7 @@ server {
 	client_max_body_size 0;
 	
 	# Custom error pages 
-		error_page 400 401 402 403 404 500 502 503 504 /error.php?error=$status;
+		error_page 400 401 402 403 404 500 502 503 504 https://domain.com/error.php?error=$status;
 		
 	# AUTHORIZATION BLOCK	
 		location /auth-admin {
