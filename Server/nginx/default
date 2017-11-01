@@ -68,8 +68,8 @@ server {
         }
 		
 # BLOCK DASHBOARD FILES
-	location ~ \.(json|db|yml|log|md|conf|lock)$|/\. {
-    return 404;
+	location ~ /loginLog.json|chat.db|users.db|org.log {
+    	return 404;
 	}
 
 # PLEXPY CONTAINER
