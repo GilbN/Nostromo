@@ -203,18 +203,18 @@ server {
 		#include /config/nginx/php.conf;
 	}
 # PLEX SUB DIR	
-	    location /plex/ {
+	location /plex/ {
 		auth_request /auth-user;
-        proxy_pass          http://plex-upstream/;
-        include /config/nginx/php.conf;
-    	}
+        proxy_pass http://plex-upstream/;
+        include /config/nginx/SSO.conf;
+	}
     if ($http_referer ~* /plex/) {
         rewrite ^/web/(.*) /plex/web/$1? redirect;
-    	}
+	}
 	
 }
 
-# PLEX SERVER 
+# PLEX SERVER SUB-DOMAIN
    server {
      listen 443 ssl http2;
      server_name plex plex.DOMAIN.COM;
@@ -223,10 +223,7 @@ server {
        alias /www/errorpages/;
        internal;
        }
-	
-	# Custom error pages
-	error_page 400 401 402 403 404 500 502 /error.php?error=$status;
-	
+		
         location /auth-user {
             internal;
             proxy_pass http://192.168.1.34:8282/auth.php?user;
@@ -282,10 +279,10 @@ server {
                 try_files $uri $uri/ /index.php?_url=$uri&$query_string;
         }
 		
-		location /admin {
+	location /admin {
                 try_files $uri $uri/ /index.php?_url=$uri&$query_string;
-				    auth_basic "Restricted";
-					auth_basic_user_file /config/nginx/.htpasswd;
+		auth_basic "Restricted";
+		auth_basic_user_file /config/nginx/.htpasswd;
         }
  
 	location ~ \.php$ {
@@ -298,8 +295,8 @@ server {
 		include /etc/nginx/fastcgi_params;
 	}
  
-    fastcgi_buffer_size 4K;
-    fastcgi_buffers 64 4k; 
+		fastcgi_buffer_size 4K;
+    		fastcgi_buffers 64 4k; 
 }
 
 # LOGARR 
@@ -319,7 +316,7 @@ server {
         }
 	
 	location / {
-				#auth_request /auth-admin;
+		#auth_request /auth-admin;
                 try_files $uri $uri/ /index.php?_url=$uri&$query_string;
         }
 	
