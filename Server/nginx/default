@@ -77,44 +77,54 @@ server {
 # Oh And Domain.com/plexpy/auth is the address..
     	location /plexpy {
 		auth_request /auth-user;
-		#location /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
    		proxy_pass http://192.168.1.34:8181;
 		include /config/nginx/proxy.conf;
-      	proxy_bind $server_addr;
-      	proxy_set_header X-Forwarded-Host $server_name;
+      		proxy_bind $server_addr;
+      		proxy_set_header X-Forwarded-Host $server_name;
+		proxy_set_header X-Forwarded-Ssl     on;	
+	}
+	
+# PLEXPY ALLOW API FOR MOBILE APPS
+	location /plexpy/api {
+		#auth_request /auth-user;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+   		proxy_pass http://192.168.1.34:8181;
+		include /config/nginx/proxy.conf;
+      		proxy_bind $server_addr;
+      		proxy_set_header X-Forwarded-Host $server_name;
 		proxy_set_header X-Forwarded-Ssl     on;
 		
 	}	
 	
-	# RADARR CONTAINER
+# RADARR CONTAINER
 	location ^~ /radarr {
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
 		auth_request /auth-admin;
-    	proxy_pass http://192.168.1.34:7878/radarr;
-    	proxy_set_header Host $host;
-    	proxy_set_header X-Real-IP $remote_addr;
-    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    		proxy_pass http://192.168.1.34:7878/radarr;
+    		proxy_set_header Host $host;
+    		proxy_set_header X-Real-IP $remote_addr;
+    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 	
-	# SONARR CONTAINER
+# SONARR CONTAINER
 	location ^~ /sonarr {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    	proxy_pass http://192.168.1.34:8989/sonarr;
-    	proxy_set_header Host $host;
-    	proxy_set_header X-Real-IP $remote_addr;
-    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    		proxy_pass http://192.168.1.34:8989/sonarr;
+    		proxy_set_header Host $host;
+    		proxy_set_header X-Real-IP $remote_addr;
+    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 
 # JACKETT CONTAINER
 	location ^~ /jackett/ {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    	proxy_pass http://192.168.1.34:9117/;
-    	proxy_set_header Host $host;
-    	proxy_set_header X-Real-IP $remote_addr;
-    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    		proxy_pass http://192.168.1.34:9117/;
+    		proxy_set_header Host $host;
+    		proxy_set_header X-Real-IP $remote_addr;
+    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}	
 	
 # NETDATA 301 REDIRECT
@@ -136,39 +146,39 @@ server {
 		proxy_store off;
 	}
 
-# OMBI CONTAINER
+# OMBI V2 CONTAINER
 #	location ^~ /ombi {
 #		auth_request /auth-user;
 #		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-#    	include /config/nginx/proxy.conf;
+#    		include /config/nginx/proxy.conf;
 #		proxy_pass http://192.168.1.34:3579/ombi;
 #	}
 	
 #OMBIV3 CONTAINER
-    location /ombi {
-			auth_request /auth-user;
-            proxy_pass http://192.168.1.34:3579/ombi;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection keep-alive;
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
+	location /ombi {
+		auth_request /auth-user;
+		proxy_pass http://192.168.1.34:3579/ombi;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection keep-alive;
+		proxy_set_header Host $host;
+		proxy_cache_bypass $http_upgrade;
     	}	
 	
 # SABNZBD CONTAINER
 	location ^~ /sabnzbd {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    	include /config/nginx/proxy.conf;
+    		include /config/nginx/proxy.conf;
 		proxy_pass http://192.168.1.34:8383/sabnzbd/;
 		proxy_set_header Host $host;
 	}
 	
 # NZBGET CONTAINER
-    location ^~ /nzbget {
+	location ^~ /nzbget {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    	include /config/nginx/proxy.conf;
+    		include /config/nginx/proxy.conf;
 		proxy_pass http://192.168.1.34:6789;
 		proxy_set_header Host $host;
     	}
@@ -197,16 +207,16 @@ server {
 	}	
 # CUSTOM NETDATA
 	location /customnetdata {
-		#auth_request /auth-admin;
+		auth_request /auth-admin;
 		root /config/www/;
 		index test2.html index.php;
 		#include /config/nginx/php.conf;
 	}
 # PLEX SUB DIR	
 	location /plex/ {
-		auth_request /auth-user;
+	auth_request /auth-user;
         proxy_pass http://plex-upstream/;
-        include /config/nginx/SSO.conf;
+        include /config/nginx/proxy.conf;
 	}
     if ($http_referer ~* /plex/) {
         rewrite ^/web/(.*) /plex/web/$1? redirect;
