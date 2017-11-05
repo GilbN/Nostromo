@@ -41,7 +41,7 @@ server {
 # MAIN SERVER BLOCK
 server {
 	listen 443 ssl default_server;    
-	server_name weyland.tech;    
+	server_name domain.com;    
 	
 	# SSL settings
 	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
