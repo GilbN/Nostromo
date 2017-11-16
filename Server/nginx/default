@@ -33,8 +33,8 @@ server 192.168.1.34:8113;
 server {
  	listen 80;
 	listen 443 ssl http2;
- 	server_name www.weyland.tech; 
- 	return 301 https://weyland.tech$request_uri;
+ 	server_name www.DOMAIN.COM; 
+ 	return 301 https://DOMAIN.COM$request_uri;
 }
 ################################################################################################################
 #////////////////////////////////////////////////MAIN SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
@@ -43,7 +43,7 @@ server {
 # MAIN SERVER BLOCK
 server {
 	listen 443 ssl http2 default_server;    
-	server_name weyland.tech;
+	server_name DOMAIN.COM;
 	
 	# SSL settings
 	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
