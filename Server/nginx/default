@@ -80,7 +80,7 @@ server {
         include /config/nginx/proxy.conf;			
         }
 		
-	# BLOCK DASHBOARD FILES
+	# BLOCK ORGANIZR DASHBOARD FILES
 	location ~ /loginLog.json|chat.db|users.db|org.log {
     return 404;
 		}
