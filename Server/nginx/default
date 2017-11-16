@@ -25,15 +25,17 @@ upstream deluge-upstream {
 server 192.168.1.34:8113;
     keepalive 32;
 }
+################################################################################################################
+#////////////////////////////////////////////////SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
+################################################################################################################
 
 # REDIRECT TRAFFIC TO https://[domain.com]
 server {
  	listen 80;
 	listen 443 ssl http2;
- 	server_name www.domain.com; 
- 	return 301 https://domain.com$request_uri;
+ 	server_name www.weyland.tech; 
+ 	return 301 https://weyland.tech$request_uri;
 }
-
 ################################################################################################################
 #////////////////////////////////////////////////MAIN SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
@@ -41,7 +43,7 @@ server {
 # MAIN SERVER BLOCK
 server {
 	listen 443 ssl http2 default_server;    
-	server_name domain.com;    
+	server_name weyland.tech;
 	
 	# SSL settings
 	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
@@ -52,9 +54,12 @@ server {
 		
 	client_max_body_size 0;
 	
+
+	
 	# Custom error pages 
 		error_page 400 401 402 403 404 405 408 500 502 503 504 $scheme://$server_name/error.php?error=$status;
-		
+		error_log    /config/log/nginx/error.log;
+	
 	# AUTHORIZATION BLOCK	
 		location /auth-admin {
             internal;
@@ -64,109 +69,122 @@ server {
 
         location /auth-user {
             internal;
-            proxy_pass http://192.168.1.34:8282/auth.php?user;
+			proxy_pass http://192.168.1.34:8282/auth.php?user;
             proxy_set_header Content-Length "";
         }
-		
-# ORGANIZR CONTAINER
+	
+	
+	# ORGANIZR CONTAINER
 	location / {
         proxy_pass http://organizr-upstream;
-        include /config/nginx/proxy.conf;
+        include /config/nginx/proxy.conf;			
         }
 		
-# BLOCK DASHBOARD FILES
+	# BLOCK DASHBOARD FILES
 	location ~ /loginLog.json|chat.db|users.db|org.log {
-    	return 404;
-	}
+    return 404;
+		}
 		
 ################################################################################################################
 #////////////////////////////////////////////////SUBDIRECTORIES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
 
-# PLEXPY CONTAINER
-# Do NOT check "Enable HTTP Proxy" in PlexPy
-# Oh And Domain.com/plexpy/auth is the address..
-    	location /plexpy {
+	# PLEXPY CONTAINER
+	# Do NOT check "Enable HTTP Proxy" in PlexPy
+	# Oh And Domain.com/plexpy/auth is the address..
+    location /plexpy {
 		auth_request /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
    		proxy_pass http://192.168.1.34:8181;
 		include /config/nginx/proxy.conf;
-      		proxy_bind $server_addr;
-      		proxy_set_header X-Forwarded-Host $server_name;
-		proxy_set_header X-Forwarded-Ssl     on;	
-	}
-	
-# PLEXPY ALLOW API FOR MOBILE APP
-    location /plexpy/api {
+      	proxy_bind $server_addr;
+      	proxy_set_header X-Forwarded-Host $server_name;
+		proxy_set_header X-Forwarded-Ssl     on;
+		
+	}	
+	# PLEXPY ALLOW API FOR MOBILE APP
+    #location /plexpy/api {
 		#auth_request /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-   		proxy_pass http://192.168.1.34:8181/plexpy/api;
-		include /config/nginx/proxy.conf;
-      		proxy_bind $server_addr;
-      		proxy_set_header X-Forwarded-Host $server_name;
-		proxy_set_header X-Forwarded-Ssl     on;		
-	}	
+   		#proxy_pass http://192.168.1.34:8181/plexpy/api;
+		#include /config/nginx/proxy.conf;
+      	#proxy_bind $server_addr;
+      	#proxy_set_header X-Forwarded-Host $server_name;
+		#proxy_set_header X-Forwarded-Ssl     on;
+		
+	#}
 	
-# RADARR CONTAINER
+	# RADARR CONTAINER
 	location ^~ /radarr {
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
 		auth_request /auth-admin;
-    		proxy_pass http://192.168.1.34:7878/radarr;
-    		proxy_set_header Host $host;
-    		proxy_set_header X-Real-IP $remote_addr;
-    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_pass http://192.168.1.34:7878/radarr;
+		include /config/nginx/proxy.conf;		
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 	
-# RADARR ALLOW API FOR MOBILE APPS
-	location ^~ /radarr/api {
-		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-		auth_request /auth-admin;
-    		proxy_pass http://192.168.1.34:7878/radarr/api;
-		include /config/nginx/proxy.conf;		
-    		proxy_set_header Host $host;
-    		proxy_set_header X-Real-IP $remote_addr;
-    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	}	
+	# RADARR ALLOW API FOR MOBILE APPS
+	#location ^~ /radarr/api {
+    	#proxy_pass http://192.168.1.34:7878/radarr/api;
+		#include /config/nginx/proxy.conf;	
+    	#proxy_set_header Host $host;
+    	#proxy_set_header X-Real-IP $remote_addr;
+    	#proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	#}
 	
-# SONARR CONTAINER
+	# SONARR CONTAINER
 	location ^~ /sonarr {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		proxy_pass http://192.168.1.34:8989/sonarr;
-    		proxy_set_header Host $host;
-    		proxy_set_header X-Real-IP $remote_addr;
-    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_pass http://192.168.1.34:8989/sonarr;
+		include /config/nginx/proxy.conf;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 	
-# SONARR ALLOW API FOR MOBILE APPS
+	# SONARR ALLOW API FOR MOBILE APPS
 	location ^~ /sonarr/api {
 		#auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		proxy_pass http://192.168.1.34:8989/sonarr/api;
+    	proxy_pass http://192.168.1.34:8989/sonarr/api;
 		include /config/nginx/proxy.conf;
-    		proxy_set_header Host $host;
-    		proxy_set_header X-Real-IP $remote_addr;
-    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 	
-# JACKETT CONTAINER
+		# DELUGE CONTAINER
+	location ^~ /deluge {
+		auth_request /auth-admin;
+		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+		proxy_pass http://192.168.1.34:8113/;
+		proxy_set_header X-Deluge-Base "/deluge/";
+		include /config/nginx/proxy.conf;
+		add_header X-Frame-Options SAMEORIGIN;
+	}
+
+	# JACKETT CONTAINER
 	location ^~ /jackett/ {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		proxy_pass http://192.168.1.34:9117/;
-    		proxy_set_header Host $host;
-    		proxy_set_header X-Real-IP $remote_addr;
-    		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    	proxy_pass http://192.168.1.34:9117/;
+		include /config/nginx/proxy.conf;
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}	
 	
-# NETDATA 301 REDIRECT
+	# NETDATA 301 REDIRECT
 	location /netdata {
         return 301 /netdata/;
     }
 	
-# NETDATA CONTAINER
+	# NETDATA CONTAINER
 	location ~ /netdata/(?<ndpath>.*) {
-		#auth_request /auth-user;
+		auth_request /auth-user;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
 		proxy_set_header X-Forwarded-Host $host;
 		proxy_set_header X-Forwarded-Server $host;
@@ -178,53 +196,59 @@ server {
 		proxy_store off;
 	}
 
-# OMBI V2 CONTAINER
-#	location ^~ /ombi {
+	# OMBI CONTAINER
+#	location ^~ /search {
 #		auth_request /auth-user;
 #		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-#    		include /config/nginx/proxy.conf;
-#		proxy_pass http://192.168.1.34:3579/ombi;
+#    	include /config/nginx/proxy.conf;
+#		proxy_pass http://192.168.1.34:3579/search;
 #	}
 	
-#OMBIV3 CONTAINER
-	location /ombi {
-		auth_request /auth-user;
-		proxy_pass http://192.168.1.34:3579/ombi;
-		proxy_http_version 1.1;
-		proxy_set_header Upgrade $http_upgrade;
-		proxy_set_header Connection keep-alive;
-		proxy_set_header Host $host;
-		proxy_cache_bypass $http_upgrade;
-    	}	
+	#OMBIV3 CONTAINER
+    location /ombi {
+			auth_request /auth-user;
+            proxy_pass http://192.168.1.34:5000/ombi;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection keep-alive;
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    } 
 	
-# SABNZBD CONTAINER
-	location ^~ /sabnzbd {
+	# SABNZBD redirect
+    location /sabnzbd {
+        return 301 /sabnzbd/;
+    }
+	
+	# SABNZBD CONTAINER
+	location ^~ /sabnzbd/ {
 		auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		include /config/nginx/proxy.conf;
+    	include /config/nginx/proxy.conf;
 		proxy_pass http://192.168.1.34:8383/sabnzbd/;
 		proxy_set_header Host $host;
 	}
 	
-# SABNZBD ALLOW API FOR MOBILE APPS
-	location ^~ /sabnzbd/api {
+	# SABNZBD ALLOW API FOR MOBILE APPS
+	#location /sabnzbd/api {
 		#auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		include /config/nginx/proxy.conf;
-		proxy_pass http://192.168.1.34:8383/sabnzbd/api;
-		proxy_set_header Host $host;
-	}	
+    	#include /config/nginx/proxy.conf;
+		#proxy_pass http://192.168.1.34:8383/sabnzbd/api;
+		#proxy_set_header Host $host;
+	#}
 	
-# NZBGET CONTAINER
-	location ^~ /nzbget {
-		auth_request /auth-admin;
+	
+	# NZBGET CONTAINER
+    #location ^~ /nzbget {
+		#auth_request /auth-admin;
 		#if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-    		include /config/nginx/proxy.conf;
-		proxy_pass http://192.168.1.34:6789;
-		proxy_set_header Host $host;
-    	}
+    	#include /config/nginx/proxy.conf;
+		#proxy_pass http://192.168.1.34:6789;
+		#proxy_set_header Host $host;
+    #}
 	
-# LOGARR 
+	# LOGARR 
 	location /logarr {
 		auth_request /auth-admin;
 		root /config/www;
@@ -232,53 +256,67 @@ server {
 		include /config/nginx/php.conf;
 	}
 	
-# MONITORR 
+	# MONITORR 
 	location /monitorr {
 		auth_request /auth-admin;
 		root /config/www;
 		index index.html index.php;
 		include /config/nginx/php.conf;
 	}
-# deez
-	location /deezloader {
-		auth_request /auth-admin;
+	
+	# deez
+	location /blog {
 		root /config/www/;
 		index index.html index.php;
+		#try_files $uri $uri/ /index.php?_url=$uri&$query_string;
 		include /config/nginx/php.conf;
+		#include /config/nginx/proxy.conf;
 	}	
-# CUSTOM NETDATA
+	
+	# CUSTOM NETDATA
 	location /customnetdata {
-		auth_request /auth-admin;
+		#auth_request /auth-user;
 		root /config/www/;
 		index test2.html index.php;
 		#include /config/nginx/php.conf;
 	}
-# PLEX SUB DIR	
-	location /plex/ {
-	auth_request /auth-user;
+	
+	# PLEX SUB DIR	
+	    location /plex/ {
+		auth_request /auth-user;
         proxy_pass http://plex-upstream/;
-        include /config/nginx/proxy.conf;
-	}
+        include /config/nginx/SSO.conf;
+    }
     if ($http_referer ~* /plex/) {
         rewrite ^/web/(.*) /plex/web/$1? redirect;
-	}
+    }
 	
+	# Now Showing redirect
+    location /nowshowing {
+        return 301 /nowshowing/;
+    }
+	
+	#NOW SHOWING CONTAINER 
+		location /nowshowing/ {
+         include /config/nginx/proxy.conf;
+         proxy_pass http://192.168.1.34:6878/;
+        }	
 }
 
 ################################################################################################################
 #////////////////////////////////////////////////SUBDOMAINS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
 
-# PLEX SERVER SUB-DOMAIN
+# PLEX SERVER 
    server {
      listen 443 ssl http2;
-     server_name plex plex.DOMAIN.COM;
+     server_name plex plex.weyland.tech;
 
      location /error/ {
        alias /www/errorpages/;
        internal;
        }
-		
+	
         location /auth-user {
             internal;
             proxy_pass http://192.168.1.34:8282/auth.php?user;
@@ -320,9 +358,9 @@ server {
 server {
 		listen 80;	
 		listen 443 ssl http2;
-		server_name blog.DOMAIN.COM;
+		server_name blog.weyland.tech;
  
-      root /config/www/grav/;
+      root /config/www/blog/;
       index index.html index.php;
  
     location /error/ {
@@ -334,47 +372,12 @@ server {
                 try_files $uri $uri/ /index.php?_url=$uri&$query_string;
         }
 		
-	location /admin {
+		location /admin {
                 try_files $uri $uri/ /index.php?_url=$uri&$query_string;
-		auth_basic "Restricted";
-		auth_basic_user_file /config/nginx/.htpasswd;
+				    auth_basic "Restricted";
+					auth_basic_user_file /config/nginx/.htpasswd;
         }
  
-	location ~ \.php$ {
-		fastcgi_split_path_info ^(.+\.php)(/.+)$;
-		# With php7-cgi alone:
-		fastcgi_pass 127.0.0.1:9000;
-		# With php7-fpm:
-		#fastcgi_pass unix:/var/run/php7-fpm.sock;
-		fastcgi_index index.php;
-		include /etc/nginx/fastcgi_params;
-	}
- 
-		fastcgi_buffer_size 4K;
-    		fastcgi_buffers 64 4k; 
-}
-
-# LOGARR 
-server {
-		listen 80;	
-		listen 443 ssl http2;
-		server_name logs.DOMAIN.COM;
- 
-    root /config/www/logarr/;
-    index index.html index.php;
-	if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-	
-	location /auth-admin {
-        internal;
-        proxy_pass http://192.168.1.34:8282/auth.php?admin;
-        proxy_set_header Content-Length "";
-        }
-	
-	location / {
-		#auth_request /auth-admin;
-                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
-        }
-	
 	location ~ \.php$ {
 		fastcgi_split_path_info ^(.+\.php)(/.+)$;
 		# With php7-cgi alone:
@@ -389,12 +392,50 @@ server {
     fastcgi_buffers 64 4k; 
 }
 
+# LOGARR 
+#server {
+#		listen 80;	
+#		listen 443 ssl http2;
+#		server_name logs.weyland.tech;
+# 
+#    root /config/www/logarr/;
+#    index index.html index.php;
+#	if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+#	
+#	location /auth-admin {
+#        internal;
+#       proxy_pass http://192.168.1.34:8282/auth.php?admin;
+#        proxy_set_header Content-Length "";
+#        }
+#	
+#	location / {
+#				#auth_request /auth-admin; 
+#               try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+#      }
+#	
+#	location ~ \.php$ {
+#		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+#		# With php7-cgi alone:
+#		fastcgi_pass 127.0.0.1:9000;
+#		# With php7-fpm:
+#		#fastcgi_pass unix:/var/run/php7-fpm.sock;
+#		fastcgi_index index.php;
+#		include /etc/nginx/fastcgi_params;
+#	}
+# 
+#    fastcgi_buffer_size 4K;
+#    fastcgi_buffers 64 4k; 
+#}
+
 #MONITORR 
 server {
 		listen 80;	
 		listen 443 ssl http2;
-		server_name monitor.DOMAIN.COM;
- 
+		server_name monitor.weyland.tech;
+		
+	# Custom error pages 
+		error_page 400 401 402 403 404 405 408 500 502 503 504 https://weyland.tech/error.php?error=$status;
+		
       root /config/www/deez/monitorr;
       index index.html index.php;
 	if ($cookie_cookiePassword != "PASSWORD") { return 401; }
@@ -410,16 +451,49 @@ server {
 }
 
 # DELUGE CONTAINER
+#server {
+#    server_name  deluge.weyland.tech;
+#		listen 80;
+#        listen 443 ssl http2;
+#
+#	location / {
+#        proxy_pass http://deluge-upstream;
+#        include /config/nginx/proxy.conf;
+#		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+#	}
+#}
+
+# NOWSHOWING CONTAINER
+# server {
+#    server_name  ns.weyland.tech;
+#		listen 80;
+#        listen 443 ssl http2;
+#
+#	location / {
+#        proxy_pass http://192.168.1.34:6878;
+#        include /config/nginx/proxy.conf;
+#		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
+#	}	
+#}
+
 server {
-    server_name  deluge.DOMAIN.COM;
+    server_name  guides.weyland.tech;
 		listen 80;
         listen 443 ssl http2;
-
-	location / {
-        proxy_pass http://deluge-upstream;
-        include /config/nginx/proxy.conf;
-		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
-	}
-	
+		return 301 https://blog.weyland.tech/;
 }
+		
+# BASIC AUTH SONARR CONTAINER
+#server {
+#    server_name  deluge.weyland.tech;
+#		listen 80;
+#        listen 443 ssl http2;
+#
+#	location / {
+#        proxy_pass http://192.168.1.34:8989;
+#        #Don't add base URL to the proxy_pass
+#        include /config/nginx/proxy.conf;
+#		include /config/nginx/basicauth.conf;
+#	}	
+#}
 
