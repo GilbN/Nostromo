@@ -475,13 +475,6 @@ server {
 #		if ($cookie_cookiePassword != "PASSWORD") { return 401; }
 #	}	
 #}
-
-server {
-    server_name  guides.weyland.tech;
-		listen 80;
-        listen 443 ssl http2;
-		return 301 https://blog.weyland.tech/;
-}
 		
 # BASIC AUTH SONARR CONTAINER
 #server {
