@@ -1,0 +1,72 @@
+#BLOG REDIRECT
+server {
+		listen 80;
+		listen 443;
+		server_name blog.domain.com;
+		return 301 https://technicalramblings.com$request_uri;
+}
+
+# BLOG REDIRECT TRAFFIC ON WWW TO https://[domain.com]
+server {
+ 	listen 80;
+	listen 443 ssl http2;
+ 	server_name www.technicalramblings.com; 
+ 	return 301 https://technicalramblings.com$request_uri;
+}
+
+# BLOG SITE
+server {
+		listen 80;	
+		listen 443 ssl http2;
+		server_name technicalramblings.com;
+
+# SSL settings
+	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
+	ssl_certificate_key /config/keys/letsencrypt/privkey.pem;
+	ssl_dhparam /config/nginx/dhparams.pem;
+	ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
+	ssl_prefer_server_ciphers on;
+		
+	client_max_body_size 0;
+	
+      root /config/www/wordpress/;
+      index index.html index.php;
+ 
+#COUNTRY GEO BLOCK	
+#		if ($allowed_country2 = no) {
+#        return 444;
+#        }
+	
+	location ~ /\. {
+	deny all;
+		}	
+		
+	location / {
+                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+		add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+		add_header X-Content-Type-Options nosniff;
+		add_header X-XSS-Protection "1; mode=block";
+		#add_header Content-Security-Policy "frame-ancestors https://*.technicalramblings.com https://technicalramblings.com";
+		#add_header X-Frame-Options "ALLOW-FROM https://*.technicalramblings.com" always;
+		add_header Referrer-Policy "strict-origin";		
+        }
+		
+#		location /wp-admin {
+#                try_files $uri $uri/ /index.php?_url=$uri&$query_string;
+#				    auth_basic "Restricted";
+#					auth_basic_user_file /config/nginx/.htpasswd;
+#        }
+ 
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# With php7-cgi alone:
+		fastcgi_pass 127.0.0.1:9000;
+		# With php7-fpm:
+		#fastcgi_pass unix:/var/run/php7-fpm.sock;
+		fastcgi_index index.php;
+		include /etc/nginx/fastcgi_params;
+	}
+ 
+    fastcgi_buffer_size 4K;
+    fastcgi_buffers 64 4k; 
+}
