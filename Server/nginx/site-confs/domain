@@ -1,24 +1,11 @@
 ################################################################################################################
 #////////////////////////////////////////////////UPSTREAMS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
-
-#ORGANIZR UPSTREAM
-upstream organizr-upstream {
-server 192.168.1.34:8282;
-    keepalive 32;
-}
-
-#NETDATA UPSTREAM
-upstream backend {
-server 192.168.1.34:19999;
-	keepalive 64;
-}
-
+include /config/nginx/upstreams.conf;
 ################################################################################################################
 #////////////////////////////////////////////////SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
-
-# REDIRECT TRAFFIC TO https://[domain.com]
+# REDIRECT TRAFFIC FROM WWW TO https://[domain.com]
 server {
  	listen 80;
 	listen 443 ssl http2;
@@ -28,263 +15,29 @@ server {
 ################################################################################################################
 #////////////////////////////////////////////////MAIN SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
-
-# MAIN SERVER BLOCK
 server {
 	listen 443 ssl http2 default_server;    
 	server_name domain.com;
 	
-	# SSL settings
-	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
-	ssl_certificate_key /config/keys/letsencrypt/privkey.pem;
-	ssl_dhparam /config/nginx/dhparams.pem;
-	ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
-	ssl_prefer_server_ciphers on;
-		
-	client_max_body_size 0;
+	#SSL settings
+	include /config/nginx/ssl.conf;
 	
-	#LOCAL IP ALLOW GEO BLOCK
-		if ($lan-ip = yes) {
-        set $allowed_country yes;
-        }
-		
-	#COUNTRY GEO BLOCK	
-		if ($allowed_country = no) {
-        return 444;
-        }
+	#Maxmind geoblock
+	include /config/nginx/geoblock.conf;
 	
-	# Custom error pages 
-		error_page 400 401 402 403 404 405 408 500 502 503 504 $scheme://$server_name/error.php?error=$status;
-		error_log /config/log/nginx/error.log;
-        access_log /config/log/nginx/access.log;
+	#Custom error pages
+	include /config/nginx/errorpages.conf;
 	
-	# AUTHORIZATION BLOCK	
-		location /auth-admin {
-            internal;
-            proxy_pass http://192.168.1.34:8282/auth.php?admin;
-            proxy_set_header Content-Length "";
-        }
-
-        location /auth-user {
-            internal;
-			proxy_pass http://192.168.1.34:8282/auth.php?user;
-            proxy_set_header Content-Length "";
-        }
+	#Organizr auth
+	include /config/nginx/serverauth.conf;
 	
+	#Block Org dashboard files
+	include /config/nginx/blockdash.conf;
 	
-	# ORGANIZR CONTAINER
-	location / {
-        proxy_pass http://organizr-upstream;
-        include /config/nginx/proxy.conf;			
-        }
-		
-	# BLOCK DASHBOARD FILES
-	location ~ /loginLog.json|chat.db|users.db|org.log {
-    return 404;
-		}
-		
+	#ORGANIZR CONTAINER
+	include /config/nginx/root.conf;	
 ################################################################################################################
 #////////////////////////////////////////////////SUBDIRECTORIES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
-
-	# PLEXPY CONTAINER
-	# Do NOT check "Enable HTTP Proxy" in PlexPy
-	# Oh And Domain.com/plexpy/auth is the address..
-    location /plexpy {
-		auth_request /auth-user;
-   		proxy_pass http://192.168.1.34:8182;
-		include /config/nginx/proxy.conf;
-      	proxy_bind $server_addr;
-      	proxy_set_header X-Forwarded-Host $server_name;
-		proxy_set_header X-Forwarded-Ssl     on;
-		
-	}
-
-	# TAUTULLI CONTAINER
-	# Do NOT check "Enable HTTP Proxy" in PlexPy
-	# Oh And Domain.com/tautulli/auth is the address..
-    location /tautulli {
-		auth_request /auth-user;
-   		proxy_pass http://192.168.1.34:8181;
-		include /config/nginx/proxy.conf;
-      	proxy_bind $server_addr;
-      	proxy_set_header X-Forwarded-Host $server_name;
-		proxy_set_header X-Forwarded-Ssl     on;
-		
-	}	
-	
-	# PLEXPY ALLOW API FOR MOBILE APP
-    #location /plexpy/api {
-   		#proxy_pass http://192.168.1.34:8181/plexpy/api;
-		#include /config/nginx/proxy.conf;
-      	#proxy_bind $server_addr;
-      	#proxy_set_header X-Forwarded-Host $server_name;
-		#proxy_set_header X-Forwarded-Ssl     on;
-		
-	#}
-	
-	# RADARR CONTAINER
-	location ^~ /radarr {
-		auth_request /auth-admin;
-    	proxy_pass http://192.168.1.34:7878/radarr;
-		include /config/nginx/proxy.conf;		
-	}
-	
-	# RADARR ALLOW API FOR MOBILE APPS
-	#location ^~ /radarr/api {
-    	#proxy_pass http://192.168.1.34:7878/radarr/api;
-		#include /config/nginx/proxy.conf;	
-	#}
-	
-	# SONARR CONTAINER
-	location ^~ /sonarr {
-		auth_request /auth-admin;
-    	proxy_pass http://192.168.1.34:8989/sonarr;
-		include /config/nginx/proxy.conf;
-	}
-	
-	# SONARR ALLOW API FOR MOBILE APPS
-	#location ^~ /sonarr/api {
-    	#proxy_pass http://192.168.1.34:8989/sonarr/api;
-		#include /config/nginx/proxy.conf;
-	#}
-	
-	# LIDARR CONTAINER
-	location ^~ /lidarr {
-		auth_request /auth-admin;
-    	proxy_pass http://192.168.1.34:8686/lidarr;
-		include /config/nginx/proxy.conf;		
-	}
-	
-	# DELUGE CONTAINER
-	location ^~ /deluge {
-		auth_request /auth-admin;
-		proxy_pass http://192.168.1.34:8113/;
-		proxy_set_header X-Deluge-Base "/deluge/";
-		include /config/nginx/proxy.conf;
-		add_header X-Frame-Options SAMEORIGIN;
-	}
-
-	# JACKETT CONTAINER
-	location ^~ /jackett/ {
-		#auth_request /auth-admin;
-    	proxy_pass http://192.168.1.34:9117/;
-		include /config/nginx/proxy.conf;
-	}	
-	
-	# NETDATA 301 REDIRECT
-	location /netdata {
-        return 301 /netdata/;
-    }
-	
-	# NETDATA CONTAINER
-	location ~ /netdata/(?<ndpath>.*) {
-		auth_request /auth-user;
-		proxy_set_header X-Forwarded-Host $host;
-		proxy_set_header X-Forwarded-Server $host;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_pass http://backend/$ndpath$is_args$args;
-		proxy_http_version 1.1;
-		proxy_pass_request_headers on;
-		proxy_set_header Connection “keep-alive”;
-		proxy_store off;
-		gzip on;
-        gzip_proxied any;
-        gzip_types *;
-	}
-	
-	#OMBIV3 CONTAINER
-    location /ombi {
-			auth_request /auth-user;
-            proxy_pass http://192.168.1.34:5000;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection keep-alive;
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
-    } 
-	
-	#The below is required after version 3.0.2517. This basically rewrites the requests to /dist/1.js to 
-	#/ombi/dist/1.js where the number 1 could be any number
-	
-	if ($http_referer ~* /ombi/) {
-    rewrite ^/dist/([0-9\d*]).js /ombi/dist/$1.js last;
+	include /config/nginx/subdirs/*.conf;
 }
-	
-	# SABNZBD redirect
-    location /sabnzbd {
-        return 301 /sabnzbd/;
-    }
-	
-	# SABNZBD CONTAINER
-	location ^~ /sabnzbd/ {
-		auth_request /auth-admin;
-    	include /config/nginx/proxy.conf;
-		proxy_pass http://192.168.1.34:8383/sabnzbd/;
-	}
-	
-	# SABNZBD ALLOW API FOR MOBILE APPS
-	#location /sabnzbd/api {
-    	#include /config/nginx/proxy.conf;
-		#proxy_pass http://192.168.1.34:8383/sabnzbd/api;
-	#}
-		
-	# NZBGET CONTAINER
-    #location ^~ /nzbget {
-		#auth_request /auth-admin;
-    	#include /config/nginx/proxy.conf;
-		#proxy_pass http://192.168.1.34:6789;
-    #}
-	
-	# LOGARR 
-	location /logarr {
-		auth_request /auth-admin;
-		root /config/www;
-		index index.php;
-		include /config/nginx/php.conf;
-	}
-	
-	# MONITORR 
-	location /monitorr {
-		auth_request /auth-admin;
-		root /config/www;
-		index index.html index.php;
-		include /config/nginx/php.conf;
-	}
-		
-	# CUSTOM NETDATA
-	location /customnetdata {
-		root /config/www/;
-		index systemcpu.html;
-	}
-	
-	# PLEX SUB DIR	
-	    location /plex/ {
-		auth_request /auth-user;
-        proxy_pass http://plex-upstream/;
-        include /config/nginx/SSO.conf;
-    }
-    if ($http_referer ~* /plex/) {
-        rewrite ^/web/(.*) /plex/web/$1? redirect;
-    }
-	
-	# Now Showing redirect
-    location /nowshowing {
-        return 301 /nowshowing/;
-    }
-	
-	#NOW SHOWING CONTAINER 
-		location /nowshowing/ {
-		auth_request /auth-user;
-        include /config/nginx/proxy.conf;
-        proxy_pass http://192.168.1.34:6878/;
-        }		
-	
-	# YOUTUBE DL CONTAINER
-	location /youtube-dl {
-		auth_request /auth-user;
-    	include /config/nginx/proxy.conf;
-		proxy_pass http://192.168.1.34:7575/youtube-dl;
-	}	
-}
-
-
