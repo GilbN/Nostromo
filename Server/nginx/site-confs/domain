@@ -34,7 +34,7 @@ server {
 	#Block Org dashboard files
 	include /config/nginx/blockdash.conf;
 	
-	#ORGANIZR CONTAINER
+	#Organizr container
 	include /config/nginx/root.conf;	
 ################################################################################################################
 #////////////////////////////////////////////////SUBDIRECTORIES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
