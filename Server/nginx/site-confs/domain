@@ -23,7 +23,7 @@ server {
 	include /config/nginx/ssl.conf;
 	
 	#Maxmind geoblock
-	include /config/nginx/geoblock.conf;
+	#include /config/nginx/geoblock.conf;
 	
 	#Custom error pages
 	include /config/nginx/errorpages.conf;
