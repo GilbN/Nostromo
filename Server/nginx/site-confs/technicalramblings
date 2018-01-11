@@ -2,7 +2,7 @@
 server {
 	listen 80;
 	listen 443;
-	server_name blog.weyland.tech;
+	server_name blog.domain.com;
 	return 301 https://technicalramblings.com$request_uri;
 }
 
