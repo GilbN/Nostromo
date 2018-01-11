@@ -14,8 +14,17 @@ server {
     listen 443 ssl;
 	include /config/nginx/php.conf;
 	include /config/nginx/proxy.conf;
-    # the virtual host name of this
+# the virtual host name of this
     server_name grafana.domain.com;
+	
+#SSL settings
+	include /config/nginx/strong-ssl.conf;
+	
+#Organizr auth
+	include /config/nginx/serverauth.conf;
+	
+#Maxmind geoblock
+	include /config/nginx/geoblock.conf;
 
     location / {
         proxy_pass http://grafana;
@@ -27,5 +36,6 @@ server {
         proxy_pass_request_headers on;
         proxy_set_header Connection "keep-alive";
         proxy_store off;
+	auth_request /auth-user;
     }
 }
