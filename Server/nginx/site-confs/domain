@@ -20,7 +20,7 @@ server {
 	server_name domain.com;
 	
 	#SSL settings
-	include /config/nginx/ssl.conf;
+	include /config/nginx/strong-ssl.conf;
 	
 	#Maxmind geoblock
 	#include /config/nginx/geoblock.conf;
