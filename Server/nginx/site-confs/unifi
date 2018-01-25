@@ -27,10 +27,10 @@ server {
 		
        location / {
 		auth_request /auth-admin;
-                proxy_cookie_domain unifi.weyland.tech $host;
-                sub_filter unifi.weyland.tech $host;
+                proxy_cookie_domain unifi.DOMAIN.COM $host;
+                sub_filter unifi.DOMAIN.COM $host;
                 proxy_cookie_domain $server_name $host;
-                sub_filter unifi.weyland>tech $host;
+                sub_filter unifi.DOMAIN>COM $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header HOST $http_host;
                 proxy_pass https://192.168.1.10:8443;
