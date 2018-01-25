@@ -46,7 +46,7 @@ server 192.168.1.34:32400;
        proxy_next_upstream     error timeout invalid_header http_500 http_502 http_503 http_504;
 		
 		#if ($cookie_cookiePassword != "YOURCOOKIEPASSWORD") { return 401; }
-		auth_request /auth-user;	
+		auth_request /auth-user; #For server-auth with Organizr, remove unless you use Organizr.	
 		proxy_pass http://plex-upstream;
      }
    }
