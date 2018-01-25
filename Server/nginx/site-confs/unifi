@@ -3,8 +3,8 @@
 server {
         listen 80;
         server_name unifi.domain.com;
-        return 301 https://unifi.weyland.tech;
-        }
+        return 301 https://unifi.domain.com;   
+	}
 		
 server {
         listen 443 ssl;
