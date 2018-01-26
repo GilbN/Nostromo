@@ -81,7 +81,7 @@ if ip_address in IP_BLACKLIST:
         username = session.usernames[0]
         title = (session.grandparentTitle + ' - ' if session.type == 'episode' else '') + session.title
         if session.sessionKey == int(sessionKey) and username not in IGNORE_LST:
-            sys.stdout.write("Killing {user}'s stream of {title}. IP: {ip} not in whitelist".format(
+            sys.stdout.write("Killing {user}'s stream of {title}. IP: {ip} in blacklist".format(
                 user=username, title=title, ip=ip_address))
             session.stop(reason=REASON.format(ip_address))
             send_notification(SUBJECT_TEXT, BODY_TEXT.format(user=username, ip=ip_address, title=title))
