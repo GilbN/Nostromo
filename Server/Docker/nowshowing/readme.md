@@ -1,7 +1,7 @@
 
 # Custom Now Showing frontpage
 
-In the style.css file add the code below to make it look like the blur theme.
+In the `style.css` file add the code below to make it look like the blur theme.
 
 Add it in the #Welcome section (Line 89)
 
