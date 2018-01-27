@@ -1,4 +1,6 @@
 
+# Custom Now Showing frontpage
+
 In the style.css file add the code below to make it look like the blur theme.
 
 Add it in the #Welcome section (Line 89)
@@ -25,3 +27,5 @@ Replace the one that is in the `/img` folder
     -webkit-background-size: auto, cover;
 }
 ```
+
+![](nowshowingblur.jpg)
