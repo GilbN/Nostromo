@@ -16,7 +16,7 @@ server 192.168.1.34:32400;
 	
         location /auth-user {
             internal;
-            proxy_pass http://192.168.1.34:8282/auth.php?user;
+            proxy_pass http://IP-TO-ORGANIZR:PORT/auth.php?user; # Add your ip and port to the Organizr container.
             proxy_set_header Content-Length "";
         }
 	
