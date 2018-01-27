@@ -3,6 +3,9 @@ In the style.css file add the code below to make it look like the blur theme.
 
 Add it in the #Welcome section (Line 89)
 
+I've added a new nowshowing logo that I think looks alot nicer. 
+Replace the one that is in the `/img` folder
+
 
 ```
 /*--------------------------------------------------------------
