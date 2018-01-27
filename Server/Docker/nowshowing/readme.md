@@ -27,5 +27,15 @@ Replace the one that is in the `/img` folder
     -webkit-background-size: auto, cover;
 }
 ```
+## Email logo
+
+Edit the `advanced.yaml` and add https://raw.githubusercontent.com/gilbN/Nostromo/master/Server/Docker/nowshowing/nowshowing.png instead of the imgur link. 
+```
+email:
+  title: 'New This Week'
+  image: 'https://raw.githubusercontent.com/gilbN/Nostromo/master/Server/Docker/nowshowing/nowshowing.png'
+  footer: 'Thanks for watching!'
+  language: 'en'
+  ```
 
 ![](nowshowingblur.jpg)
