@@ -12,6 +12,14 @@ server {
  	server_name www.domain.com; 
  	return 301 https://domain.com$request_uri;
 }
+
+# REDIRECT TRAFFIC TO https://[domain.com]
+server {
+	listen 80;
+	server_name DOMAIN.COM;
+	return 301 https://DOMAIN.COM$request_uri;
+	}
+
 ################################################################################################################
 #////////////////////////////////////////////////MAIN SERVER BLOCK\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\#
 ################################################################################################################
