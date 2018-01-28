@@ -1,4 +1,4 @@
-#BLOG REDIRECT
+# OLD BLOG REDIRECT
 server {
 	listen 80;
 	listen 443;
@@ -14,9 +14,15 @@ server {
  	return 301 https://technicalramblings.com$request_uri;
 }
 
-# BLOG SITE
+# REDIRECT TRAFFIC TO https://[domain.com]
 server {
-	listen 80;	
+ 	listen 80;
+ 	server_name technicalramblings.com; 
+ 	return 301 https://technicalramblings.com$request_uri;
+}
+
+# BLOG SITE
+server {	
 	listen 443 ssl http2;
 	server_name technicalramblings.com;
 
