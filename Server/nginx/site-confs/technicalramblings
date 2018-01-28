@@ -14,7 +14,7 @@ server {
  	return 301 https://technicalramblings.com$request_uri;
 }
 
-# REDIRECT TRAFFIC TO https://[domain.com]
+# REDIRECT HTTP TRAFFIC TO https://[domain.com]
 server {
  	listen 80;
  	server_name technicalramblings.com; 
