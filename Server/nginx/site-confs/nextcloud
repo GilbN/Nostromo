@@ -1,4 +1,12 @@
 #NEXTCLOUD CONTAINER 
+
+# REDIRECT HTTP TRAFFIC TO https://[domain.com]
+server {
+	listen 80;
+	server_name cloud.domain.com;
+	return 301 https://cloud.domain.com$request_uri;
+	}
+
 server {  
     listen 443 ssl http2;
     server_name cloud.domain.com;
