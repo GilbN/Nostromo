@@ -3,7 +3,7 @@
 
 
 ## [Nginx](https://github.com/gilbN/Nostromo/tree/master/Server/nginx)
-This is my nginx config that I use with the lsio Letsencrypt container on unraid
+These are my nginx configs that I use with the lsio Letsencrypt container on unraid
 
 ### [Custom Now Showing](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/nowshowing)
 
