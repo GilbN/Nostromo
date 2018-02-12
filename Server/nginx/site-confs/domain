@@ -17,7 +17,7 @@ server {
 server {
 	listen 80;
 	server_name DOMAIN.COM;
-	return 301 https://DOMAIN.COM$request_uri;
+	return 301 https://$server_name$request_uri;
 	}
 
 ################################################################################################################
