@@ -18,7 +18,7 @@ server {
 server {
  	listen 80;
  	server_name technicalramblings.com; 
- 	return 301 https://technicalramblings.com$request_uri;
+ 	return 301 https://$server_name$request_uri;
 }
 
 # BLOG SITE
