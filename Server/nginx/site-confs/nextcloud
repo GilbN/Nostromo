@@ -4,7 +4,7 @@
 server {
 	listen 80;
 	server_name cloud.domain.com;
-	return 301 https://cloud.domain.com$request_uri;
+	return 301 https://$server_name$request_uri;
 	}
 
 server {  
