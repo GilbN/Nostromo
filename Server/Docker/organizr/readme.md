@@ -1,6 +1,6 @@
 # Organizr calendar colors that doesn't suck
 
-These are the custom colors I use with the Blur theme.
+#### These are the custom colors I use with the Blur theme.
 
 ```
     --color-calAvailable:       rgba(25, 255, 0, .15);
@@ -24,3 +24,6 @@ div.row-bblur {
     background-color: rgba(45, 66, 85, 100) !important;
 }
 ```
+
+![](https://github.com/gilbN/Nostromo/blob/master/Server/Docker/organizr/legend.png)
+![](https://github.com/gilbN/Nostromo/blob/master/Server/Docker/organizr/calendar.png)
