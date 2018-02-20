@@ -1,3 +1,8 @@
+# Organizr calendar colors that doesn't suck
+
+These are the custom colors I use with the Blur theme.
+
+```
     --color-calAvailable:       rgba(25, 255, 0, .15);
     --color-calUnavailable:     rgba(171, 0, 0, .50);
     --color-calUnreleased:      rgba(0, 0, 0, .15);
@@ -18,4 +23,4 @@ div.row-bblur {
 .palette-Deep-Purple-900.bg {
     background-color: rgba(45, 66, 85, 100) !important;
 }
-
+```
