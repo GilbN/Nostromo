@@ -1,6 +1,3 @@
-#CACHE STATIC CONTENT
-include /config/nginx/cache.conf
-
 # OLD BLOG REDIRECT
 server {
 	listen 80;
