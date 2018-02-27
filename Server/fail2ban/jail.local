@@ -6,14 +6,14 @@
 [DEFAULT]
 
 # "bantime" is the number of seconds that a host is banned.
-bantime  = 300
+bantime  = 86400
 
 # A host is banned if it has generated "maxretry" during the last "findtime"
 # seconds.
 findtime  = 600
 
 # "maxretry" is the number of failures before a host get banned.
-maxretry = 5
+maxretry = 3
 
 
 [ssh]
