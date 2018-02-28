@@ -1,8 +1,3 @@
-#PLEX UPSTREAM FOR THE SUB DOMAIN
-upstream plex-upstream {
-server 192.168.1.34:32400;
-    keepalive 32;
-}
 # REDIRECT HTTP TRAFFIC TO https://[domain.com]
 server {
 	listen 80;
@@ -53,6 +48,6 @@ server {
 		
 		#if ($cookie_cookiePassword != "YOURCOOKIEPASSWORD") { return 401; }
 		auth_request /auth-user; #For server-auth with Organizr, remove unless you use Organizr.	
-		proxy_pass http://plex-upstream;
+		proxy_pass http://192.168.1.34:32400;
      }
    }
