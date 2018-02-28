@@ -1,9 +1,3 @@
-upstream grafana {
-    # the grafana server
-    server 192.168.1.34:3000;
-    keepalive 64;
-}
-
 server {
 	listen 80;
 	server_name grafana.domain.com;
@@ -27,7 +21,7 @@ server {
 	include /config/nginx/geoblock.conf;
 
     location / {
-        proxy_pass http://grafana;
+        proxy_pass http://192.168.1.34:3000;
 	proxy_hide_header X-Frame-Options;
 	proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;
