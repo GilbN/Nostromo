@@ -1,4 +1,4 @@
-# Organizr calendar colors that doesn't suck
+# Organizr calendar colors that doesn't "suck"
 
 #### These are the custom colors I use with the Blur theme.
 
