@@ -1,0 +1,43 @@
+server {
+	listen 80 default_server;
+	root /config/www/Dashboard;
+	index index.html index.htm index.php;
+
+	server_name _;
+	client_max_body_size 0;
+
+# get real IP
+	real_ip_header X-Forwarded-For;
+    set_real_ip_from 172.17.0.0/16;
+    real_ip_recursive on;
+	
+	location / {
+		try_files $uri $uri/ /index.html /index.php?$args =404;
+	}
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		# With php5-cgi alone:
+		fastcgi_pass 127.0.0.1:9000;
+		# With php5-fpm:
+		#fastcgi_pass unix:/var/run/php5-fpm.sock;
+		fastcgi_index index.php;
+		include /etc/nginx/fastcgi_params;
+		
+##Extra cache parameters
+	fastcgi_cache phpcache; # The name of the cache key-zone to use
+	fastcgi_cache_valid 200 30m; # What to cache: 'Code 200' responses, for half an hour
+	fastcgi_cache_methods GET HEAD; # What to cache: only GET and HEAD requests (not POST)
+	add_header X-Fastcgi-Cache $upstream_cache_status; # Add header so we can see if the cache hits or misses		
+
+	}
+
+location /auth-admin {
+        internal;
+        rewrite ^ /auth.php?admin;
+    }
+location /auth-user {
+        internal;
+        rewrite ^ /auth.php?user;
+    }
+}
+
