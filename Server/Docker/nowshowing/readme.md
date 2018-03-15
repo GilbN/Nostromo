@@ -40,4 +40,4 @@ email:
   language: 'en'
   ```
 
-![](nowshowingblur.jpg)
+![](nowshowingblur.png)
