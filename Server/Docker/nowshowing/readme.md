@@ -1,6 +1,8 @@
 
 # Custom Now Showing frontpage
 
+https://github.com/ninthwalker/NowShowing
+
 In the `style.css` file add the code below to make it look like the blur theme.
 
 Add it in the #Welcome section (Line 89)
