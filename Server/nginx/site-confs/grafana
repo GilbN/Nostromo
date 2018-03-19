@@ -6,10 +6,10 @@ server {
 
 server {
     listen 443 ssl;
+	server_name grafana.domain.com;
 	include /config/nginx/php.conf;
 	include /config/nginx/proxy.conf;
-# the virtual host name of this
-    server_name grafana.domain.com;
+   
 	
 #SSL settings
 	include /config/nginx/strong-ssl.conf;
