@@ -14,7 +14,7 @@ server {
 	include /config/nginx/strong-ssl.conf;
 
 	#Organizr auth
-	include /config/nginx/serverauth.conf;
+	include /config/nginx/serverauth.conf; #For server-auth with Organizr, remove unless you use Organizr.
 	
 	location / {
      
