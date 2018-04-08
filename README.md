@@ -6,7 +6,7 @@ These are my nginx configs that I use with the lsio Letsencrypt container on unr
 
 ### [Custom Now Showing](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/nowshowing)
 
-### [Tuttifrutti/Plexpy blacklist ip script](https://github.com/gilbN/Nostromo/tree/master/Server/scripts/plexpy)
+### [Tautulli/Plexpy blacklist ip script](https://github.com/gilbN/Nostromo/tree/master/Server/scripts/plexpy)
 
 ### [Organizr calendar colors that doesn't "suck"](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/organizr)
 
