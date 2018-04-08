@@ -1,0 +1,26 @@
+# REDIRECT HTTP TRAFFIC TO https://[domain.com]
+server {
+ 	listen 80;
+ 	server_name news.domain.com; 
+ 	return 301 https://$server_name$request_uri;
+}
+
+server {	
+		listen 443 ssl http2;
+		server_name news.domain.com;
+
+		# SSL settings
+		include /config/nginx/ssl.conf;
+    
+location / {
+    return 444;
+    }
+		
+location /tautulli/newsletter {
+		proxy_pass http://192.168.1.34:8181/tautulli/newsletter;
+		proxy_bind $server_addr;
+    proxy_set_header X-Forwarded-Host $server_name;
+		proxy_set_header X-Forwarded-Ssl on;
+		include /config/nginx/proxy.conf;
+    }
+}
