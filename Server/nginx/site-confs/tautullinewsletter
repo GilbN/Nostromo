@@ -14,7 +14,8 @@ server {
 location / {
 	return 444;
 	}
-		
+	
+# TAUTULLI ALLOW SELFHOSTED NEWSLETTER		
 location /tautulli/newsletter {
 	proxy_pass http://192.168.1.34:8181/tautulli/newsletter;
 	proxy_bind $server_addr;
@@ -22,4 +23,13 @@ location /tautulli/newsletter {
 	proxy_set_header X-Forwarded-Ssl on;
 	include /config/nginx/proxy.conf;
     }
+    
+# TAUTULLI ALLOW SELFHOSTED IMAGES
+location /tautulli/image {
+	proxy_pass http://192.168.1.34:8181/tautulli/image;
+	proxy_bind $server_addr;
+        proxy_set_header X-Forwarded-Host $server_name;
+	proxy_set_header X-Forwarded-Ssl on;
+	include /config/nginx/proxy.conf;
+    }    
 }
