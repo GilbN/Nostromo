@@ -2,6 +2,8 @@
 
 #### These are the custom colors I use with the Blur theme.
 
+Goto - Settings > Edit Colors > Custom CSS
+
 ```css
     --color-calAvailable:       rgba(25, 255, 0, .15);
     --color-calUnavailable:     rgba(171, 0, 0, .50);
