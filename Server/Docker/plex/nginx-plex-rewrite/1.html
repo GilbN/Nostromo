@@ -1,0 +1,22 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+jQuery(document).ready(function () {
+newTab();
+});
+
+function newTab() {
+ var form = document.createElement("form");
+ form.method = "GET";
+ form.action = "https://raw.githubusercontent.com/gilbN/Nostromo/master/Server/Docker/plex/nginx-plex-rewrite/2.html";
+ form.target = "_parent";
+ document.body.appendChild(form);
+ form.submit();
+}
+</script>
+</head>
+<body>
+<a class="my-link">link</a>
+</body>
+</html>
