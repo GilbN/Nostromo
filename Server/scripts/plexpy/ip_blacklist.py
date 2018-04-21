@@ -21,13 +21,13 @@ import configparser
 
 
 ## EDIT THESE SETTINGS ##
-PLEX_TOKEN = 'xxxxxxxxx'
+PLEX_TOKEN = 'xxxxxxxx'
 PLEX_URL = 'http://localhost:32400'
 
-TAUTULLI_APIKEY = 'xxxxxxx'  # Your Tautulli API key
+TAUTULLI_APIKEY = 'xxxxxxxxxxx'  # Your Tautulli API key
 TAUTULLI_URL = 'http://localhost:8181/'  # Your Tautulli URL
 
-IP_BLACKLIST = ['10.10.10.10']  # List IP addresses.
+IP_BLACKLIST = ['192.168.1.160','10.10.1.87','192.168.1.18']  # List IP addresses.
 IGNORE_LST = ('')  # List usernames that should be ignored.
 
 REASON = 'IP Address: {} was found in blacklist.'
@@ -81,11 +81,11 @@ if ip_address in IP_BLACKLIST:
         username = session.usernames[0]
         title = (session.grandparentTitle + ' - ' if session.type == 'episode' else '') + session.title
         if session.sessionKey == int(sessionKey) and username not in IGNORE_LST:
-            sys.stdout.write("Killing {user}'s stream of {title}. IP: {ip} not in whitelist".format(
+            sys.stdout.write("Killing {user}'s stream of {title}. IP: {ip} in blacklist".format(
                 user=username, title=title, ip=ip_address))
             session.stop(reason=REASON.format(ip_address))
             send_notification(SUBJECT_TEXT, BODY_TEXT.format(user=username, ip=ip_address, title=title))
         else:
             sys.stdout.write('User: {} is ignored from this script.'.format(username))
 else:
-    sys.stdout.write('IP: {} is in whitelist, ignoring.'.format(ip_address))
+    sys.stdout.write('IP: {} is not in blacklist, ignoring.'.format(ip_address))
