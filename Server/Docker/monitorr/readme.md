@@ -18,9 +18,9 @@ In the Docker tab click on `Add Container` and select the Monitorr template.
 
 ![](https://github.com/gilbN/Nostromo/blob/master/Server/Docker/monitorr/template.png)
 
-* Set your host port. (Has to be something else than 80 as unraid uses that)
+* Set your `Host Port` (Has to be something else than 80 as unraid uses that)
 
-* Set your host path for the configuration files.
+* Set your `Host Path` for the configuration files.
 
 Click `Apply`
 
