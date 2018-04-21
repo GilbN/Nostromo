@@ -1,4 +1,3 @@
-```xml
 <?xml version="1.0"?>
 <Container version="2">
   <Name>monitorr</Name>
@@ -63,4 +62,6 @@ See full configuration instructions in the WiKi: https://github.com/Monitorr/Mon
   </Environment>
   <Config Name="Host Port 1" Target="80" Default="8700" Mode="tcp" Description="Container Port: 80" Type="Port" Display="always" Required="true" Mask="false">8700</Config>
   <Config Name="Host Path 1" Target="/app" Default="" Mode="rw" Description="Container Path: /app" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/Docker/monitorr/app</Config>
-  <Config Name="Key 1" Target="PUID" Default="99" Mode="" 
+  <Config Name="Key 1" Target="PUID" Default="99" Mode="" Description="Container Variable: PUID" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
+  <Config Name="Key 2" Target="PGID" Default="100" Mode="" Description="Container Variable: PGID" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
+</Container>
