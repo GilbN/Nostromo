@@ -14,7 +14,7 @@ Click `Save`
 
 ## Add the container
 
-In the Docker tab click on `Add Container` and select the Monitorr template.
+At the bottom of the Docker tab page click on `Add Container` and select the Monitorr template.
 
 ![](https://github.com/gilbN/Nostromo/blob/master/Server/Docker/monitorr/template.png)
 
