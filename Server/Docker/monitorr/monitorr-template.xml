@@ -1,0 +1,66 @@
+```xml
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>monitorr</Name>
+  <Repository>monitorr/monitorr</Repository>
+  <Registry>https://hub.docker.com/r/monitorr/monitorr/</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Privileged>false</Privileged>
+  <Support>https://hub.docker.com/r/monitorr/monitorr/</Support>
+  <Project/>
+  <Overview>- Monitorr is a webfront to live display the status of any webapp or service[br][br]&#xD;
+&#xD;
+See full configuration instructions in the WiKi: https://github.com/Monitorr/Monitorr/wiki[br]&#xD;
+  [br][br][b][u][span style='color: #E80000;']Configuration[/span][/u][/b][br]&#xD;
+  [b]8700[/b] Port for Monitorr's webui [br]&#xD;
+  [b]/app[/b] Location for storing configuration files[br]</Overview>
+  <Category/>
+  <WebUI>http://[IP]:[PORT:8700]/</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/Monitorr/Monitorr/master/assets/img/monitorr.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <DateInstalled>1524305828</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <DonateImg/>
+  <MinVer/>
+  <Description>- Monitorr is a webfront to live display the status of any webapp or service[br][br]&#xD;
+&#xD;
+See full configuration instructions in the WiKi: https://github.com/Monitorr/Monitorr/wiki[br]&#xD;
+  [br][br][b][u][span style='color: #E80000;']Configuration[/span][/u][/b][br]&#xD;
+  [b]8700[/b] Port for Monitorr's webui [br]&#xD;
+  [b]/app[/b] Location for storing configuration files[br]</Description>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8700</HostPort>
+        <ContainerPort>80</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/monitorr/</HostDir>
+      <ContainerDir>/app</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>99</Value>
+      <Name>PUID</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>100</Value>
+      <Name>PGID</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="Host Port 1" Target="80" Default="8700" Mode="tcp" Description="Container Port: 80" Type="Port" Display="always" Required="true" Mask="false">8700</Config>
+  <Config Name="Host Path 1" Target="/app" Default="" Mode="rw" Description="Container Path: /app" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/Docker/monitorr/app</Config>
+  <Config Name="Key 1" Target="PUID" Default="99" Mode="" 
