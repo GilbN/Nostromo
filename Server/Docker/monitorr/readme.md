@@ -5,7 +5,7 @@
 
 Go to the Docker tab and scroll down to the bottom of the page.
 
-Add `https://github.com/si0972/unraid-templates/tree/master/si0972` in the `Template repositories box`
+Add `https://github.com/Monitorr/Monitorr/tree/unraid/template` in the `Template repositories box`
 
 Click `Save`
 
