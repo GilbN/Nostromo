@@ -1,4 +1,4 @@
-# Blacklist Tautulli/Plexpy script
+# Tautulli blacklist script
 
 Copy pasta ip_whitelist.py from [blacktwin/JBOPS](https://github.com/blacktwin/JBOPS) 
 
