@@ -4,13 +4,19 @@ Copy pasta ip_whitelist.py from [blacktwin/JBOPS](https://github.com/blacktwin/J
 
 I just changed some variables to make it a blacklist instead. 
 
-[ip_blacklist.py](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/ip_blacklist.py)  
+[ip_blacklist.py](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/ip_blacklist.py) 
+
+* * *
 
 ## Blacklist Notifications
 
 Add a new notification agent and set trigger to `Playback Stop`
 
-Set condition to `IP Address` `is` `[blacklist IP]`
+![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/triggered.png)
+
+Set condition to `IP Address` `is` `<blacklisted IP>` Add the IP you want to blacklist here.
+
+![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/conditions.png)
 
 Add Notification text on `Playback Stop`
 
@@ -18,5 +24,10 @@ Subject Line: e.g. `IP Blacklisted 🚫`
 
 Message Body: e.g. `Killed {user}'s stream of {title}. IP: {ip_address} in blacklist`
 
-![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/culled.png)
+![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/text.png)
+
+
+Discord example notification
+
+![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/culled.png)
 
