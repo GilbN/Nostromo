@@ -10,15 +10,15 @@ I just changed some variables to make it a blacklist instead.
 
 ## Blacklist Notifications
 
-Add a new notification agent and set trigger to `Playback Stop`
+Add a new notification agent and set **Triggers** to `Playback Stop`
 
 ![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/triggered.png)
 
-Set condition to `IP Address` `is` `<blacklisted IP>` Add the IP you want to blacklist here.
+Set **Conditions** to `IP Address` `is` `<blacklisted IP>` Add the IP you want to blacklist here.
 
 ![](https://github.com/gilbN/Nostromo/blob/master/Server/scripts/plexpy/img/conditions.png)
 
-Add Notification text on `Playback Stop`
+Add Notification **Text** on `Playback Stop`
 
 Subject Line: e.g. `IP Blacklisted 🚫`
 
