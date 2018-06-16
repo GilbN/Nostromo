@@ -7,7 +7,6 @@ server {
 server {
     listen 443 ssl;
 	server_name grafana.domain.com;
-	include /config/nginx/php.conf;
 	include /config/nginx/proxy.conf;
    
 	
