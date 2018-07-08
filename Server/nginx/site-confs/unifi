@@ -24,10 +24,10 @@ server {
         proxy_store off;
 		
 	#Organizr auth
-	include /config/nginx/serverauth.conf; #For server-auth with Organizr, remove unless you use Organizr.
+	include /config/nginx/serverauth-V2.conf; #For server-auth with Organizr, remove unless you use Organizr.
 		
        location / {
-		auth_request /auth-admin; #For server-auth with Organizr, remove unless you use Organizr.
+		auth_request /auth-0; #For server-auth with Organizr, remove unless you use Organizr.
                 proxy_cookie_domain unifi.DOMAIN.COM $host;
                 sub_filter unifi.DOMAIN.COM $host;
                 proxy_cookie_domain $server_name $host;
@@ -41,7 +41,7 @@ server {
                 proxy_set_header Connection "upgrade";
         }
         location /ws/ {
-		auth_request /auth-admin; #For server-auth with Organizr, remove unless you use Organizr.
+		auth_request /auth-0; #For server-auth with Organizr, remove unless you use Organizr.
                 proxy_pass https://192.168.1.10:8443/ws/;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
