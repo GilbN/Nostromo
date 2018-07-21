@@ -6,6 +6,9 @@ body {
 #stats {
      background-color: rgba(0,0,0,.15) !important;
 }
+.double-val-label>span.success {
+    background-color: #28a745 !important;
+}	
 .servicetile:hover, .servicetile:focus {
      text-shadow: 0 0 20px #000;
 }
