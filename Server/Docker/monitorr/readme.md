@@ -45,5 +45,3 @@ And add this in custom HTML in Organizr:
 ![](https://i.imgur.com/O2fUyTz.jpg)
 
 ![](https://i.imgur.com/sJRELOP.jpg)
-
-![](https://i.imgur.com/EB6YZZG.png)
