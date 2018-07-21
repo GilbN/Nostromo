@@ -62,7 +62,7 @@ background-color: rgba(0,0,0,.15) !important
     box-shadow: 0 0 10px rgba(0,0,0,.15), 0 0 5px rgba(0,0,0,.15) !important;
 }
 .footer {
-    color: blue !important;
+    color: #f8f8f8 !important;
 }
 .footer:hover {
     text-shadow: 0 0 15px #000000 !important;
