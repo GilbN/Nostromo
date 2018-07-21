@@ -61,8 +61,8 @@ background-color: rgba(0,0,0,.15) !important
 .pace, .pace-progress-inner {
     box-shadow: 0 0 10px rgba(0,0,0,.15), 0 0 5px rgba(0,0,0,.15) !important;
 }
-#footer {
-    color: transparent !important;
+.footer {
+    color: blue !important;
 }
 .footer:hover {
     text-shadow: 0 0 15px #000000 !important;
