@@ -25,7 +25,7 @@ At the bottom of the Docker tab page click on `Add Container` and select the Mon
 Click `Apply`
 
 
-# Custom CSS
+# Custom CSS for Organizr
 > This theme will mess with your Monitorr base theme. And it will hide the settings button. Go to /monitorr/settings.php for settings.
 
 > It is created purely for use with Organizr.
