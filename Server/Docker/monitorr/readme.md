@@ -34,6 +34,12 @@ Add this in the custom css box:
 ```css
 @import "https://rawgit.com/gilbN/Nostromo/master/Server/Docker/monitorr/custom-organizr-css.css";
 ```
+And add this in custom HTML in Organizr:
+```css
+<div style="overflow:hidden; height:250px">
+<embed style="height:calc(100% + 80px)" width='100%' src='https://domain.com/monitorr/index.min.php' />
+</div>
+```
 ![](https://i.imgur.com/kX4Qcsj.jpg)
 
 ![](https://i.imgur.com/O2fUyTz.jpg)
