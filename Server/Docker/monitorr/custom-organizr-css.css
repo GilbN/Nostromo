@@ -1,0 +1,72 @@
+body {
+    background-color: transparent !important;
+}
+#stats {
+     background-color: rgba(0,0,0,.15) !important;
+}
+.servicetile:hover, .servicetile:focus {
+     text-shadow: 0 0 20px #000;
+}
+#servicetitle:hover, #servicetitle:focus {
+    text-shadow: 0 0 20px #000;     
+}
+#servicetitle {
+    color: #fff !important;     
+}
+.btnoffline, .btnunknown, .btnonline  {
+    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.9) !important;
+    -webkit-box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.9) !important;
+}
+.btnonline {
+    background-color: #28a745 !important;
+}
+#time {
+    background-color: rgba(0,0,0,.15) !important;
+    color: #fff !important;
+}
+#slidertable {
+background-color: rgba(0,0,0,.15) !important
+}
+#textslider {
+    color: #fff !important;
+}
+.dtg {
+   color: #fff !important; 
+}
+.datemin {
+   color: #fff !important; 
+}
+#center {
+    background-color: rgba(0,0,0,.0) !important;
+        box-shadow: 0px 0px 0px 0px #ffffff00, 0px 0px 0px 0px #ffffff00, 10px 0px 10px 0px #ffffff00, -10px 0px 10px 2px #ffffff00 !important;
+}
+.col-lg-4 {
+    background-color: rgba(0,0,0,.15) !important;
+}
+#clock {
+    background-color: rgba(0,0,0,.15) !important;
+    color: #fff !important;
+}
+.date {
+    color: #fff !important; 
+}
+#summary {
+    background-color: #e84242 !important;
+    border-radius: 23px 22px 22px 23px/23px 23px 22px 22px;
+    box-shadow: 0px 2px 5px rgb(15, 15, 15) !important;
+}
+.pace, .pace-progress {
+    background: rgba(0,0,0,.15) !important;
+}
+.pace, .pace-progress-inner {
+    box-shadow: 0 0 10px rgba(0,0,0,.15), 0 0 5px rgba(0,0,0,.15) !important;
+}
+.footer:hover {
+    text-shadow: 0 0 15px transparent !important;
+}
+.alpaca-control-label, .alpaca-control.radio {
+    color: black !important;
+}
+.navbar-brand {
+    text-shadow: 0 0 15px #000000;
+	}
