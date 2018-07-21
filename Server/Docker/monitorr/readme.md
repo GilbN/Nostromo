@@ -26,6 +26,9 @@ Click `Apply`
 
 
 # Custom CSS
+> This theme will mess with your Monitorr base theme. And it will hide the settings button. Goto /monitorr/settings.php for settings.
+> It is created purely for use with Organizr.
+
 Add this in the custom css box:
 ```css
 @import "https://rawgit.com/gilbN/Nostromo/master/Server/Docker/monitorr/custom-organizr-css.css";
