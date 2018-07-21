@@ -81,3 +81,9 @@ background-color: rgba(0,0,0,.15) !important
 .navbar-brand {
     text-shadow: 0 0 15px #000000 !important;
 	}
+.Rtable-cell {
+    color: #000000 !important;
+}
+#colorkey {
+    color: #000000 !important;
+}
