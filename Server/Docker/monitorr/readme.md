@@ -26,8 +26,14 @@ Click `Apply`
 
 
 # Custom CSS
+Add this in the custom css box:
+```css
+@import "https://rawgit.com/gilbN/Nostromo/master/Server/Docker/monitorr/custom-organizr-css.css";
+```
 ![](https://i.imgur.com/kX4Qcsj.jpg)
 
 ![](https://i.imgur.com/O2fUyTz.jpg)
 
 ![](https://i.imgur.com/sJRELOP.jpg)
+
+![](https://i.imgur.com/EB6YZZG.png)
