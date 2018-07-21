@@ -64,6 +64,9 @@ background-color: rgba(0,0,0,.15) !important
 .footer:hover {
     text-shadow: 0 0 15px transparent !important;
 }
+#footer [
+    color: transparent;
+}
 .alpaca-control-label, .alpaca-control.radio {
     color: black !important;
 }
