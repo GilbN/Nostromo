@@ -68,5 +68,5 @@ background-color: rgba(0,0,0,.15) !important
     color: black !important;
 }
 .navbar-brand {
-    text-shadow: 0 0 15px #000000;
+    text-shadow: 0 0 15px #000000 !important;
 	}
