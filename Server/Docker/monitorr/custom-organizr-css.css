@@ -3,6 +3,8 @@ body {
 }
 #stats {
      background-color: rgba(0,0,0,.15) !important;
+     padding-left: .0rem !important;
+     padding-right: 1.11rem !important;
 }
 .double-val-label>span.success {
     background-color: #28a745 !important;
