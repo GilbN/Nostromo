@@ -6,6 +6,9 @@ body {
      padding-left: .0rem !important;
      padding-right: 1.11rem !important;
 }
+#hd {
+    padding-left: 0.8rem !important;
+}
 .double-val-label>span.success {
     background-color: #28a745 !important;
 }	
