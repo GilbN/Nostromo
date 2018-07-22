@@ -41,7 +41,7 @@ And add this in custom HTML in Organizr:
 </div>
 ```
 ## Subfilter
-As this theme will change the base theme, you can get around that by using subfilter in Nginx.
+As this theme will change the base theme, you can get around that by using [subfilter](http://nginx.org/en/docs/http/ngx_http_sub_module.html) in Nginx.
 Create another reverse proxy for monitorr and add this:
 ```nginx
 		proxy_set_header Accept-Encoding "";
