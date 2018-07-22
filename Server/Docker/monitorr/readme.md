@@ -40,6 +40,48 @@ And add this in custom HTML in Organizr:
 <embed style="height:calc(100% + 50px)" width='100%' src='https://domain.com/monitorr/index.min.php' />
 </div>
 ```
+## Subfilter
+As this theme will change the base theme, you can get around that by using subfilter in Nginx.
+Create another reverse proxy for monitorr and add this:
+```nginx
+		proxy_set_header Accept-Encoding "";
+		sub_filter
+		'</head>'
+		'<link rel="stylesheet" type="text/css" href="https://rawgit.com/gilbN/Nostromo/master/Server/Docker/monitorr/custom-organizr-css.css">
+		</head>';
+		sub_filter_once on;
+```
+Here is a complete example:
+```nginx
+#MONITORR CONTAINER 
+
+# REDIRECT HTTP TRAFFIC TO https://[domain.com]
+server {
+ 	listen 80;
+ 	server_name monitorr.domain.com; 
+ 	return 301 https://$server_name$request_uri;
+}
+
+server {  
+    listen 443 ssl http2;
+    server_name monitorr.domain.com;
+
+	#SSL settings
+	include /config/nginx/ssl.conf
+		
+location / {
+    proxy_pass http://192.168.1.2:8701;
+    include /config/nginx/proxy.conf;
+		proxy_set_header Accept-Encoding "";
+		sub_filter
+		'</head>'
+		'<link rel="stylesheet" type="text/css" href="https://rawgit.com/gilbN/Nostromo/master/Server/Docker/monitorr/custom-organizr-css.css">
+		</head>';
+		sub_filter_once on;
+  }
+}
+```
+
 ![](https://i.imgur.com/kX4Qcsj.jpg)
 
 ![](https://i.imgur.com/O2fUyTz.jpg)
