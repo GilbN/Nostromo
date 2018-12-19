@@ -1,4 +1,5 @@
 By using the [strong-ssl.conf](https://github.com/gilbN/Nostromo/blob/master/Server/nginx/strong-ssl.conf) file you will get A+ ratings on [securityheaders.io](https://securityheaders.io) and [ssllabs.com](https://www.ssllabs.com/ssltest/)
+You can use the [sub-strong-ssl.conf](https://github.com/gilbN/Nostromo/blob/master/Server/nginx/sub-strong-ssl.conf) on subdomains you want to iframe on domain.com. The `strong-ssl.conf` will block iframing if used on a subdomain. 
 
 Read more about the **geoblock.conf** file [here](https://technicalramblings.com/blog/blocking-countries-with-geoip2-using-the-letsencrypt-docker-container/) 
 
