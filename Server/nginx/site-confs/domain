@@ -35,9 +35,6 @@ server {
 	#Organizr auth
 	include /config/nginx/serverauth.conf;
 	
-	#Block Org dashboard files
-	include /config/nginx/blockdash.conf;
-	
 	#Organizr container
 	include /config/nginx/root.conf;	
 ################################################################################################################
