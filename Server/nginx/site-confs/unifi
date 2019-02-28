@@ -32,7 +32,6 @@ include /config/nginx/ssl.conf;
                 proxy_set_header Connection "upgrade";
         }
         location /ws/ {
-		auth_request /auth-0; #For server-auth with Organizr, remove unless you use Organizr.
                 proxy_pass https://192.168.1.10:8443/ws/;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
