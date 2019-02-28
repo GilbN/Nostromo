@@ -10,7 +10,7 @@ server {
         listen 443 ssl;
         server_name unifi.domain.com;
 	
-## NOTE: If you use the strong-ssl.conf settings you need to remove HTTPOnly; from proxy_cookie_path / "/; HTTPOnly; Secure";	
+## NOTE: If you use the strong-ssl.conf settings you need to remove HTTPOnly; from proxy_cookie_path / "/; HTTPOnly; Secure"; in strong-ssl.conf	
 # SSL settings
 	ssl_certificate /config/keys/letsencrypt/fullchain.pem;
 	ssl_certificate_key /config/keys/letsencrypt/privkey.pem;
