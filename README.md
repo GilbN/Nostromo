@@ -8,7 +8,7 @@ These are my nginx configs that I use with the lsio Letsencrypt container on unr
 
 ### [Tautulli/Plexpy blacklist ip script](https://github.com/gilbN/Nostromo/tree/master/Server/scripts/plexpy)
 
-### [Organizr calendar colors that doesn't "suck"](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/organizr)
+### [Custom Organizrv1 calendar colors](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/organizr)
 
 #### For unRAID guides check out my blog: https://technicalramblings.com/
 
