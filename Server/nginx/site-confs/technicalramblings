@@ -1,11 +1,3 @@
-# OLD BLOG REDIRECT
-server {
-	listen 80;
-	listen 443;
-	server_name blog.domain.com;
-	return 301 https://technicalramblings.com$request_uri;
-}
-
 # BLOG REDIRECT TRAFFIC ON WWW TO https://[domain.com]
 server {
  	listen 80;
