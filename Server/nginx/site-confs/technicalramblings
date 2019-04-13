@@ -20,8 +20,6 @@ server {
 
 #SSL settings
 	include /config/nginx/strong-ssl.conf;
-	add_header Expect-CT max-age=30,report-uri="https://technicalramblings.report-uri.com/r/d/ct/reportOnly";
-	add_header Content-Security-Policy "default-src 'self'; img-src 'self' https://i.imgur.com https://i0.wp.com https://i2.wp.com; object-src 'none'; script-src 'self'; style-src 'self'; font-src 'https://fonts.googleapis.com';";
 
 	root /config/www/wordpress/;
 	index index.html index.php;
