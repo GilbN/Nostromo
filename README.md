@@ -12,4 +12,4 @@ These are my nginx configs that I use with the lsio Letsencrypt container on unr
 
 #### For unRAID guides check out my blog: https://technicalramblings.com/
 
-If you have any questions you can find me here:  [![Discord](https://img.shields.io/badge/Discord-Organizr-6f83cc.svg?style=flat-square)](https://organizr.us/discord)
+If you have any questions you can find me here:  [![Discord](https://img.shields.io/badge/chat-Discord-blue.svg?style=for-the-badge&logo=discord)](https://discord.gg/HM5uUKU)
