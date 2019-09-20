@@ -1,8 +1,8 @@
 # Nostromo
 [![](https://github.com/gilbN/blog/blob/master/pages/01.blog/01.my-unraid-server/Unraid%20banner.png)](https://technicalramblings.com/blog/my-unraid-server/)
 
-## [Nginx](https://github.com/gilbN/Nostromo/tree/master/Server/nginx)
-These are my nginx configs that I use with the lsio Letsencrypt container on unraid
+## ~~[Nginx](https://github.com/gilbN/Nostromo/tree/master/Server/nginx)~~
+ These files are not updated anymore please use the samples in `proxy-confs` or the examples here https://github.com/organizrTools/Config-Collections-for-Nginx
 
 ### [Custom Now Showing](https://github.com/gilbN/Nostromo/tree/master/Server/Docker/nowshowing)
 
